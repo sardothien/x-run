@@ -1,7 +1,7 @@
 PROGRAM   = x-run
 CC        = gcc
 CFLAGS    = -g -Wall
-LDFLAGS   = -lGL -lGLU -lglut
+LDFLAGS   = -lGL -lGLU -lglut -lm
 
 $(PROGRAM): main.o scene.o
 	$(CC) -o $(PROGRAM) main.o scene.o $(LDFLAGS)
