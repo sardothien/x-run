@@ -7,6 +7,8 @@ typedef struct {
     int type;
 } Obstacle;
 
+float time_parameter;
+
 void drawSystem();
 void drawFloor(double width);
 // void drawObjects();

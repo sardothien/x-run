@@ -12,9 +12,8 @@ static void on_release(unsigned char key, int x, int y);
 static void on_keyboard(unsigned char key, int x, int y);
 
 static int timer_active;
-static float time;
 static double z = 0, x = 0;
-static int possible_moves[] = {0, 0};
+static int moves[] = {0, 0};
 
 int main(int argc, char ** argv){
 
@@ -31,7 +30,7 @@ int main(int argc, char ** argv){
     // glutSpecialFunc(on_special_key);
     glutKeyboardUpFunc(on_release);
     
-    time = 0;
+    time_parameter = 0;
     timer_active = 0;
     
     glClearColor(1, 1, 0.6, 0);
@@ -75,14 +74,14 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 'A':
             // levo
             printf("left\n");
-            possible_moves[1] = 1;
+            moves[1] = 1;
             glutPostRedisplay();
             break;
         case 'd':
         case 'D':
             // desno
             printf("right\n");
-            possible_moves[0] = 1;
+            moves[0] = 1;
             glutPostRedisplay();
             break;
         // dodati i za space 
@@ -93,12 +92,12 @@ static void on_keyboard(unsigned char key, int x, int y){
 //     switch(key){
 //         case GLUT_KEY_LEFT:
 //             printf("right\n");
-//             possible_moves[1] = 1;
+//             moves[1] = 1;
 //             glutPostRedisplay();
 //             break;
 //         case GLUT_KEY_RIGHT:
 //             printf("left\n");
-//             possible_moves[0] = 1;
+//             moves[0] = 1;
 //             glutPostRedisplay();
 //             break;
 //     }
@@ -110,11 +109,11 @@ static void on_release(unsigned char key, int x, int y)
     {
     case 'a':
     case 'A':
-        possible_moves[1] -= 1;
+        moves[1] -= 1;
         break;
     case 'd':
     case 'D':
-        possible_moves[0] -= 1;
+        moves[0] -= 1;
         break;
     }
 }
@@ -134,14 +133,15 @@ static void on_timer(int value){
     if(value != 0)
         return;
     
-    if(possible_moves[0] && x < 3)
+    if(moves[0] && x < 3)
         x += 0.6;
     
-    if(possible_moves[1] && x > -3)
+    if(moves[1] && x > -3)
         x -= 0.6;
     
-    z++;
-    
+    z += 0.2;
+    time_parameter++;
+
    glutPostRedisplay();
     
     if(timer_active)
@@ -159,7 +159,7 @@ static void on_display(void){
               x, 0, -3-z,
               0, 1, 0);
 
-    drawSystem();   
+    //drawSystem();   
     drawFloor(2);
     
 //     for(int i = 0; i < obstacleNo1; i++){
@@ -178,7 +178,7 @@ static void on_display(void){
 //     }
     
     drawObstacle(1, 0, -10, 1);
-    drawObstacle(0, 0, -20, 2);
+    drawObstacle(-0.5, 0, -40, 2);
     drawObstacle(-2, 0, -30, 3);
     
     glutSwapBuffers();
