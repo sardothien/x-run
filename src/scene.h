@@ -12,5 +12,6 @@ void drawFloor(double width);
 // void drawObjects();
 
 void drawObstacle(float x, float y, float z, int type);
+void drawHeal();
      
 #endif

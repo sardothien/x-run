@@ -75,9 +75,9 @@ void drawObstacle(float x, float y, float z, int type){
             glutSolidCube(1);
         glPopMatrix();
     }
-    /*else if(type == 2){ // heal
-        
-    }*/
+    else if(type == 2){ // heal
+        drawHeal();
+    }
     else if(type == 3){ // enemy
         glPushMatrix();
             glColor3f(0.3, 0, 0.6);
@@ -85,4 +85,22 @@ void drawObstacle(float x, float y, float z, int type){
             glutSolidSphere(0.5, 20, 20);
         glPopMatrix();
     }
+}
+
+void drawHeal(){
+
+    glPushMatrix();
+    	glColor3f(0.8, 0, 0);
+    	glTranslatef(0, 0.5, 0);
+    	glScalef(0.6, 0.2, 0.2);
+    	glutSolidCube(1);
+    glPopMatrix();
+
+
+   glPushMatrix();
+        glColor3f(0.8, 0, 0);
+        glTranslatef(0, 0.5, 0);
+        glScalef(0.2, 0.6, 0.3);
+        glutSolidCube(1);
+   glPopMatrix();
 }
