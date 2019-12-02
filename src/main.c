@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "scene.h"
+#include "image.h"
 
 static void on_display(void);
 static void on_timer(int value);
@@ -12,7 +13,6 @@ static void on_release(unsigned char key, int x, int y);
 static void on_keyboard(unsigned char key, int x, int y);
 
 static int timer_active;
-static double z = 0, x = 0;
 static int moves[] = {0, 0};
 
 int main(int argc, char ** argv){
@@ -32,6 +32,8 @@ int main(int argc, char ** argv){
     
     time_parameter = 0;
     timer_active = 0;
+    x = 0;
+    z = 0;
     
     glClearColor(1, 1, 0.6, 0);
     glEnable(GL_DEPTH_TEST);
@@ -139,7 +141,7 @@ static void on_timer(int value){
     if(moves[1] && x > -3)
         x -= 0.6;
     
-    z += 0.2;
+    z += 0.4;
     time_parameter++;
 
    glutPostRedisplay();
@@ -162,20 +164,13 @@ static void on_display(void){
     //drawSystem();   
     drawFloor(2);
     
-//     for(int i = 0; i < obstacleNo1; i++){
+    // TODO - citanje prepreka iz datoteke
+//     for(int i = 0; i < obstacleNum; i++){
 //         Obstacle o1 = obstacle1[i];
 //         drawObstacle(o1.x, o1.y, o1.z, 1);
 //     }
-// 
-//     for(int i = 0 ; i < obstacleNo2; i++){
-//         Obstacle o2 = obstacle2[i];
-//         drawObstacle(o2.x, o2.y, o2.z, 2);
-//     }
-//     
-//     for(int i = 0 ; i < obstacleNo3; i++){
-//         Obstacle o3 = obstacle3[i];
-//         drawObstacle(o3.x, o3.y, o3.z, 3);
-//     }
+
+    // drawHeader();
     
     drawObstacle(1, 0, -10, 1);
     drawObstacle(-0.5, 0, -40, 2);

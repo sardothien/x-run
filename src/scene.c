@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "scene.h"
+#include "image.h"
 
 /* Funkcija za koordinatni sistem */
 void drawSystem(){
@@ -60,6 +61,21 @@ void drawFloor(double width){
     glPopMatrix();
 }
 
+/* Funkcija za zaglavlje u kojem se nalazi slika karaktera
+   i informacije o preostalim zivotima */
+// void drawHeader(){
+//     glColor3f(0.2, 0.2, 0.2);
+
+//     glPushMatrix();
+//         glBegin(GL_POLYGON);
+//             glVertex3f(0.3, -0.3, 0);
+//             glVertex3f(0.3, 0.3, 0);
+//             glVertex3f(-0.3, 0.3, 0);
+//             glVertex3f(-0.2, -0.3, 0);
+//         glEnd();
+//     glPopMatrix();
+// }
+
 // void drawObjects(){
 //     glColor3f(0, 0, 0);
 //     
@@ -72,21 +88,21 @@ void drawFloor(double width){
 /* Funkcija za iscrtavanje objekata */
 void drawObstacle(float x, float y, float z, int type){
     
-    if(type == 1){ // cube
+    if(type == 1){ // cube - #
         glPushMatrix();
             glColor3f(0, 0.6, 0.6);
             glTranslatef(x, y, z);
             glutSolidCube(1);
         glPopMatrix();
     }
-    else if(type == 2){ // heal
+    else if(type == 2){ // heal- x
         glPushMatrix();
             glTranslatef(x, y, z);
             glRotatef(time_parameter*10.0f, 0, 1, 0);
             drawHeal();
         glPopMatrix();
     }
-    else if(type == 3){ // enemy - sphere
+    else if(type == 3){ // enemy - o
         glPushMatrix();
             glColor3f(0.3, 0, 0.6);
             glTranslatef(x, y, z);

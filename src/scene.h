@@ -7,10 +7,12 @@ typedef struct {
     int type;
 } Obstacle;
 
+double z, x;
 float time_parameter;
 
 void drawSystem();
 void drawFloor(double width);
+void drawHeader();
 // void drawObjects();
 
 void drawObstacle(float x, float y, float z, int type);
