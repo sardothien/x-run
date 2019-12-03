@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "scene.h"
-#include "image.h"
+//#include "image.h"
 
 static void on_display(void);
 static void on_timer(int value);
@@ -14,6 +14,13 @@ static void on_keyboard(unsigned char key, int x, int y);
 
 static int timer_active;
 static int moves[] = {0, 0};
+
+Level lvl = {
+    .levelMatrix = NULL,
+    .rowNumber = 0,
+    .obstacleNumberInRow = 0,
+    .viewDistance = 70
+};
 
 int main(int argc, char ** argv){
 
@@ -38,6 +45,9 @@ int main(int argc, char ** argv){
     glClearColor(1, 1, 0.6, 0);
     glEnable(GL_DEPTH_TEST);
 
+    /* Ucitavanje nivoa iz datoteke */
+    lvl.levelMatrix = loadLevel("level.txt", &lvl.rowNumber, &lvl.obstacleNumberInRow);
+
     glutMainLoop();
 
     return 0;
@@ -48,6 +58,8 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 27: 
         case 'q':
         case 'Q':
+            // quit/exit
+            deallocLevel(lvl.levelMatrix, lvl.rowNumber);
             printf("Izašli ste iz igre.\n");
             exit(0);
             break;
@@ -86,7 +98,7 @@ static void on_keyboard(unsigned char key, int x, int y){
             moves[0] = 1;
             glutPostRedisplay();
             break;
-        // dodati i za space 
+        // dodati i za space - pucanje
     }
 }
 
@@ -141,7 +153,7 @@ static void on_timer(int value){
     if(moves[1] && x > -3)
         x -= 0.6;
     
-    z += 0.4;
+    z += 0.2;
     time_parameter++;
 
    glutPostRedisplay();
@@ -163,18 +175,10 @@ static void on_display(void){
 
     //drawSystem();   
     drawFloor(2);
-    
-    // TODO - citanje prepreka iz datoteke
-//     for(int i = 0; i < obstacleNum; i++){
-//         Obstacle o1 = obstacle1[i];
-//         drawObstacle(o1.x, o1.y, o1.z, 1);
-//     }
 
     // drawHeader();
-    
-    drawObstacle(1, 0, -10, 1);
-    drawObstacle(-0.5, 0, -40, 2);
-    drawObstacle(-2, 0, -30, 3);
-    
+
+    drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
+        
     glutSwapBuffers();
 }

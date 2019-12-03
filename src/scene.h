@@ -1,11 +1,14 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-// 1 - kocka, 2 - heal, 3 - enemy (krug za sada)
+// # - kocka, x - heal, o - enemy (krug za sada)
+
 typedef struct {
-    float x, y, z;
-    int type;
-} Obstacle;
+    char ** levelMatrix;
+    int rowNumber;
+    int obstacleNumberInRow;
+    int viewDistance;
+} Level;
 
 double z, x;
 float time_parameter;
@@ -13,9 +16,11 @@ float time_parameter;
 void drawSystem();
 void drawFloor(double width);
 void drawHeader();
-// void drawObjects();
 
-void drawObstacle(float x, float y, float z, int type);
+char** loadLevel(char *path, int *rowNumber, int *obstacleNumberInRow);
+void deallocLevel(char **levelMatrix, int rowNumber);
+
+void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth);
 void drawHeal();
      
 #endif
