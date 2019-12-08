@@ -4,9 +4,10 @@
 #include <math.h>
 
 #include "scene.h"
-//#include "image.h"
+#include "image.h"
 
-#define MAX (1000)
+#define MAX (1700)
+const static float PI = 3.141592653589793;
 
 extern Level lvl;
 
@@ -65,30 +66,6 @@ void drawFloor(double width){
     glPopMatrix();
 }
 
-/* Funkcija za zaglavlje u kojem se nalazi slika karaktera
-   i informacije o preostalim zivotima */
-// void drawHeader(){
-//     glColor3f(0.2, 0.2, 0.2);
-
-//     glPushMatrix();
-//         glBegin(GL_POLYGON);
-//             glVertex3f(0.3, -0.3, 0);
-//             glVertex3f(0.3, 0.3, 0);
-//             glVertex3f(-0.3, 0.3, 0);
-//             glVertex3f(-0.2, -0.3, 0);
-//         glEnd();
-//     glPopMatrix();
-// }
-
-// void drawObjects(){
-//     glColor3f(0, 0, 0);
-//     
-//     glPushMatrix();
-//         glTranslatef(1, 1, 1);
-//         glutSolidCube(0.2);
-//     glPopMatrix();
-// }
-
 /* Funkcija za ucitavanje nivoa iz datoteke */
 char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
 
@@ -103,7 +80,6 @@ char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
 
     fscanf(in, "%d\n", rowNumber);
     fscanf(in, "%d\n", obstacleNumberInRow);
-    // printf("%d %d\n", *rowNumber, *obstacleNumberInRow);
 
     char **levelMatrix = NULL;
     levelMatrix = (char**) malloc(sizeof(char*) * (*rowNumber));
@@ -140,13 +116,115 @@ void deallocLevel(char **levelMatrix, int rowNumber){
     free(levelMatrix);
 }
 
+/* Funkcija za iscrtavanje heal-a */
+static void drawHeal(){
+
+    glPushMatrix();
+    	glColor3f(0.8, 0, 0);
+    	glTranslatef(0, 0.5, 0);
+    	glScalef(0.6, 0.2, 0.2);
+    	glutSolidCube(1);
+    glPopMatrix();
+
+   glPushMatrix();
+        glColor3f(0.8, 0, 0);
+        glTranslatef(0, 0.5, 0);
+        glScalef(0.2, 0.6, 0.3);
+        glutSolidCube(1);
+   glPopMatrix();
+}
+
+/* Funkcija za crtanje valjka */
+void drawCylinder(GLfloat radius, GLfloat height){
+    GLfloat x = 0.0;
+    GLfloat y = 0.0;
+    GLfloat angle = 0.0;
+    GLfloat angle_stepsize = 0.1;
+
+    glBegin(GL_QUAD_STRIP);
+        angle = 0.0;
+        while( angle < 2*PI ) {
+            x = radius * cos(angle);
+            y = radius * sin(angle);
+            glVertex3f(x, y , height);
+            glVertex3f(x, y , 0.0);
+            angle = angle + angle_stepsize;
+        }
+        glVertex3f(radius, 0.0, height);
+        glVertex3f(radius, 0.0, 0.0);
+    glEnd();
+}
+
+/* Funkcija za iscrtavanje enemy-a */
+static void drawEnemy(){
+    // Gornji deo glave
+    glPushMatrix();
+     	glColor3f(0.5, 0, 0);
+     	glTranslatef(0, 0.65, 0);
+     	glutSolidSphere(0.35, 30, 30);
+    glPopMatrix();
+    
+    // Valjak
+    glPushMatrix();
+        glColor3f(0.5, 0, 0);
+        glRotatef(-90, 1, 0, 0);
+        drawCylinder(0.35, 0.68);
+    glPopMatrix();
+
+    // Lice
+    glPushMatrix();
+        glColor3f(0.5, 0.5, 0);
+        glTranslatef(0, 0.15, 0.15);
+        glRotatef(-90, 1, 0, 0);
+        drawCylinder(0.25, 0.45);
+    glPopMatrix();
+
+    // Desno oko
+    glPushMatrix();
+        glColor3f(1, 0, 0);
+     	glTranslatef(0.10, 0.5, 0.35);
+     	glutSolidSphere(0.06, 30, 30);
+    glPopMatrix();
+
+    // Levo oko
+    glPushMatrix();
+        glColor3f(1, 0, 0);
+     	glTranslatef(-0.10, 0.5, 0.35);
+     	glutSolidSphere(0.06, 30, 30);
+    glPopMatrix();
+
+    glLineWidth(2);
+    glColor3f(0, 0, 0);
+
+    // Desna obrva
+    glBegin(GL_LINE_STRIP);
+        glVertex3f(0.06, 0.55, 0.4);
+        glVertex3f(0.22, 0.6, 0.4);
+    glEnd();
+
+    // Leva obrva
+    glBegin(GL_LINE_STRIP);
+        glVertex3f(-0.06, 0.55, 0.4);
+        glVertex3f(-0.22, 0.6, 0.4);
+    glEnd();
+
+    // Usta    
+    glBegin(GL_LINE_STRIP);
+        glVertex3f(0.15, 0.2, 0.4);
+        glVertex3f(0.15, 0.3, 0.4);
+        glVertex3f(0.10, 0.35, 0.4);
+        glVertex3f(-0.10, 0.35, 0.4); 
+        glVertex3f(-0.15, 0.3, 0.4);
+        glVertex3f(-0.15, 0.2, 0.4);
+    glEnd();
+}
+
 /* Funkcija za iscrtavanje objekata */
 static void drawObstacle(char type){
     
     switch (type)
     {
     case '#': // cube
-        // drawCube();
         glPushMatrix();
             glColor3f(0, 0.6, 0.6);
             glScalef(1, 3, 0.5);
@@ -164,10 +242,9 @@ static void drawObstacle(char type){
 
     case 'o': // enemy
         glPushMatrix();
-            glColor3f(0.3, 0, 0.6);
-            glScalef(0.5, 4, 1);
-            glTranslatef(0, 0.3, 0);
-            glutSolidSphere(0.5, 20, 20);
+            glTranslatef(0, sin(time_parameter / 2.0f) * 0.5f, 0);
+            glScalef(0.7, 4, 0.7);
+            drawEnemy();
         glPopMatrix();
         break;
     default:
@@ -197,22 +274,4 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
         }
 
     glPopMatrix();
-}
-
-/* Funkcija za iscrtavanje heal-a */
-void drawHeal(){
-
-    glPushMatrix();
-    	glColor3f(0.8, 0, 0);
-    	glTranslatef(0, 0.5, 0);
-    	glScalef(0.6, 0.2, 0.2);
-    	glutSolidCube(1);
-    glPopMatrix();
-
-   glPushMatrix();
-        glColor3f(0.8, 0, 0);
-        glTranslatef(0, 0.5, 0);
-        glScalef(0.2, 0.6, 0.3);
-        glutSolidCube(1);
-   glPopMatrix();
 }

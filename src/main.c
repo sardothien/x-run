@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "scene.h"
-//#include "image.h"
+#include "image.h"
 
 static void on_display(void);
 static void on_timer(int value);
@@ -153,7 +153,7 @@ static void on_timer(int value){
     if(moves[1] && x > -3)
         x -= 0.6;
     
-    z += 0.2;
+    z += 0.15;
     time_parameter++;
 
    glutPostRedisplay();
@@ -169,14 +169,12 @@ static void on_display(void){
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(x, 2, 3-z, 
+    gluLookAt(x, 1.5, 3-z, 
               x, 0, -3-z,
               0, 1, 0);
 
     //drawSystem();   
     drawFloor(2);
-
-    // drawHeader();
 
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
         
