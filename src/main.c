@@ -158,6 +158,12 @@ static void on_timer(int value){
         x -= 0.6;
     
     z += 0.15;
+
+    if(z > lvl.rowNumber){
+        timer_active = 0;
+        printf("Presli ste igricu!!!");
+    }
+    // z += 0.125 + 0.00001*z;
     time_parameter++;
 
    glutPostRedisplay();
@@ -173,14 +179,18 @@ static void on_display(void){
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(x, 1.5, 3-z, 
+    gluLookAt(x, 1, 3-z, 
               x, 0, -3-z,
               0, 1, 0);
 
     //drawSystem();   
     drawFloor(2);
-
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
+
+    if(hasCollision(x, z, -3.0, lvl.levelMatrix, lvl.rowNumber)){
+        timer_active = 0;
+        printf("Izgubili ste. Pritisnite R za restart.\n");
+    }
         
     glutSwapBuffers();
 }

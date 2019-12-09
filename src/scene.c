@@ -227,7 +227,8 @@ static void drawObstacle(char type){
     case '#': // cube
         glPushMatrix();
             glColor3f(0, 0.6, 0.6);
-            glScalef(1, 3, 0.5);
+            glScalef(0.8, 2.0, 0.8);
+            glTranslatef(0, 0.01, 0);
             glutSolidCube(1);
         glPopMatrix();
         break;
@@ -274,4 +275,23 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
         }
 
     glPopMatrix();
+}
+
+bool hasCollision(double x, double z, double minPosition, char** lvlMatrix, int rowNumber){
+    int i = nearbyint(z);
+    int j = nearbyint(x + fabs(minPosition));
+    if (i < rowNumber){
+        if (lvlMatrix[i][j] == '#')
+            return true;
+        // else if (lvlMatrix[i][j] == 'o')
+        // {
+        //     // gubi se zivot
+        // }
+        // else if (lvlMatrix[i][j] == 'x')
+        // {
+        //     // dobija se zivot
+        // }
+    }        
+
+    return false;
 }

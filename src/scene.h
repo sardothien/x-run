@@ -1,7 +1,7 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-// # - kocka, x - heal, o - enemy
+#include <stdbool.h>
 
 typedef struct Image Image;
 
@@ -24,5 +24,6 @@ void deallocLevel(char **levelMatrix, int rowNumber);
 
 void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth);
 
+bool hasCollision(double x, double z, double minPosition, char** lvlMatrix, int rowNumber);
      
 #endif
