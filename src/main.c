@@ -79,8 +79,12 @@ static void on_keyboard(unsigned char key, int x, int y){
             printf("pause\n");
             break;
         case 'r':
-        case 'R':
-            // restart
+        case 'R': 
+            // restart - trenutno ne radi x koordinata
+            x = 0;
+            z = 0;
+            time_parameter = 0;
+            timer_active = 0;
             glutPostRedisplay();
             printf("restart\n");
             break;
@@ -121,14 +125,14 @@ static void on_release(unsigned char key, int x, int y)
 {
     switch (key)
     {
-    case 'a':
-    case 'A':
-        moves[1] -= 1;
-        break;
-    case 'd':
-    case 'D':
-        moves[0] -= 1;
-        break;
+        case 'a':
+        case 'A':
+            moves[1] -= 1;
+            break;
+        case 'd':
+        case 'D':
+            moves[0] -= 1;
+            break;
     }
 }
 
