@@ -227,7 +227,7 @@ static void drawObstacle(char type){
     case '#': // cube
         glPushMatrix();
             glColor3f(0, 0.6, 0.6);
-            glScalef(0.8, 2.0, 0.8);
+            glScalef(0.8, 2.0, 0.6);
             glTranslatef(0, 0.01, 0);
             glutSolidCube(1);
         glPopMatrix();
@@ -269,7 +269,7 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
             int j;
             for (j = 0; j < obstacleNumberInRow; j++) {
                 drawObstacle(levelMatrix[i][j]);
-                glTranslatef(1,0,0);
+                glTranslatef(1, 0, 0);
             }
             glTranslatef(-j, 0, -1);
         }
@@ -277,9 +277,22 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
     glPopMatrix();
 }
 
-bool hasCollision(double x, double z, double minPosition, char** lvlMatrix, int rowNumber){
-    int i = nearbyint(z);
-    int j = nearbyint(x + fabs(minPosition));
+bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber){
+    int i, j;
+    if(x_pom == 0){
+        i = nearbyint(z+2.5); 
+        j = x_pom;
+    }
+    else if (x_pom == 1){
+        i = nearbyint(z+3.5); 
+        j = x_pom;
+    }
+    else{
+        i = nearbyint(z+4.8); 
+        j = x_pom;
+    }
+    
+    printf("%d %d\n", i, j);
     if (i < rowNumber){
         if (lvlMatrix[i][j] == '#')
             return true;

@@ -40,6 +40,7 @@ int main(int argc, char ** argv){
     time_parameter = 0;
     timer_active = 0;
     x = 0;
+    x_pom = 1;
     z = 0;
     
     glClearColor(1, 1, 0.6, 0);
@@ -83,6 +84,7 @@ static void on_keyboard(unsigned char key, int x, int y){
             // restart - trenutno ne radi x koordinata
             x = 0;
             z = 0;
+            x_pom = 0;
             time_parameter = 0;
             timer_active = 0;
             glutPostRedisplay();
@@ -151,11 +153,21 @@ static void on_timer(int value){
     if(value != 0)
         return;
     
-    if(moves[0] && x < 3)
-        x += 0.6;
+    if(moves[0] && x != 3){
+        x += 1;
+        if(x < 1)
+            x_pom = 1;
+        else
+            x_pom = 2;
+    }
     
-    if(moves[1] && x > -3)
-        x -= 0.6;
+    if(moves[1] && x != -3){
+        x -= 1;
+        if (x > -1)
+            x_pom = 1;
+        else
+            x_pom = 0;
+    }
     
     z += 0.15;
 
@@ -163,7 +175,7 @@ static void on_timer(int value){
         timer_active = 0;
         printf("Presli ste igricu!!!");
     }
-    // z += 0.125 + 0.00001*z;
+    
     time_parameter++;
 
    glutPostRedisplay();
@@ -187,7 +199,7 @@ static void on_display(void){
     drawFloor(2);
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
 
-    if(hasCollision(x, z, -3.0, lvl.levelMatrix, lvl.rowNumber)){
+    if(hasCollision(-0.5, lvl.levelMatrix, lvl.rowNumber)){
         timer_active = 0;
         printf("Izgubili ste. Pritisnite R za restart.\n");
     }

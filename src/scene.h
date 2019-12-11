@@ -6,13 +6,14 @@
 typedef struct Image Image;
 
 typedef struct {
-    char ** levelMatrix;
+    char **levelMatrix;
     int rowNumber;
     int obstacleNumberInRow;
     int viewDistance;
 } Level;
 
 double x, z;
+int x_pom;
 float time_parameter;
 
 void drawSystem();
@@ -24,6 +25,6 @@ void deallocLevel(char **levelMatrix, int rowNumber);
 
 void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth);
 
-bool hasCollision(double x, double z, double minPosition, char** lvlMatrix, int rowNumber);
+bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber);
      
 #endif
