@@ -9,6 +9,6 @@ void floorLight();
 void enemyLight(int part);
 void healLight();
 void cubeLight();
-
+void heartLight();
      
 #endif

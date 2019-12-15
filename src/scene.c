@@ -19,6 +19,8 @@ void initialize(){
     x = 0;
     x_pom = 1;
     z = 0;
+
+    lives = 3;
 }
 
 /* Funkcija za koordinatni sistem */
@@ -288,9 +290,29 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
     glPopMatrix();
 }
 
+void drawHeart(){
+    //glDisable(GL_LIGHTING);
+
+    heartLight();
+    //glColor3f(0.8, 0, 0);
+    
+    glPushMatrix();
+        glutSolidSphere(0.2, 20, 20);
+        glTranslatef(0.23, 0, 0);
+        glutSolidSphere(0.2, 20, 20);
+        glTranslatef(-0.12, -0.12, 0);
+        glRotatef(45, 0, 0, 1);
+        glutSolidCube(0.31);
+	glPopMatrix();
+
+    //glEnable(GL_LIGHTING);
+}
+
 /* Funkcija za obradu kolizija */
 bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber){
     int i, j;
+
+    // rade dobro samo za #
     if(x_pom == 0){
         i = nearbyint(z+2.5); 
         j = x_pom;
@@ -304,18 +326,23 @@ bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber){
         j = x_pom;
     }
     
-    printf("%d %d\n", i, j);
+    //printf("%d %d\n", i, j);
+    printf("%d\n", lives);
     if (i < rowNumber){
         if (lvlMatrix[i][j] == '#')
             return true;
-        // else if (lvlMatrix[i][j] == 'o')
-        // {
-        //     // gubi se zivot
-        // }
-        // else if (lvlMatrix[i][j] == 'x')
-        // {
-        //     // dobija se zivot
-        // }
+        else if (lvlMatrix[i][j] == 'o')
+        {
+            // TODO - gubi se zivot
+        }
+        else if (lvlMatrix[i][j] == 'x')
+        {
+            if (lives < 3)
+                lives++;
+        }
+
+        if (lives == 0)
+            return true;
     }        
 
     return false;

@@ -100,3 +100,13 @@ void healLight(){
     glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
     glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
 }
+
+void heartLight(){
+    GLfloat ambient_coeffs[] = {1.0, 0, 0, 1 };
+    GLfloat diffuse_coeffs[] = {1.0, 0, 0, 1 };
+    GLfloat specular_coeffs[] = {1, 0, 0, 1 };
+    
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
+}
