@@ -4,6 +4,7 @@
 
 #include "scene.h"
 #include "image.h"
+#include "light.h"
 
 static void on_display(void);
 static void on_timer(int value);
@@ -12,7 +13,6 @@ static void on_reshape(int width, int height);
 static void on_release(unsigned char key, int x, int y);
 static void on_keyboard(unsigned char key, int x, int y);
 
-static int timer_active;
 static int moves[] = {0, 0};
 
 Level lvl = {
@@ -36,13 +36,10 @@ int main(int argc, char ** argv){
     glutKeyboardFunc(on_keyboard);
     // glutSpecialFunc(on_special_key);
     glutKeyboardUpFunc(on_release);
-    
-    time_parameter = 0;
-    timer_active = 0;
-    x = 0;
-    x_pom = 1;
-    z = 0;
-    
+
+    initialize();
+    initializeLight();
+
     glClearColor(1, 1, 0.6, 0);
     glEnable(GL_DEPTH_TEST);
 
@@ -82,11 +79,7 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 'r':
         case 'R': 
             // restart - trenutno ne radi x koordinata
-            x = 0;
-            z = 0;
-            x_pom = 0;
-            time_parameter = 0;
-            timer_active = 0;
+            initialize();
             glutPostRedisplay();
             printf("restart\n");
             break;
@@ -104,7 +97,10 @@ static void on_keyboard(unsigned char key, int x, int y){
             moves[0] = 1;
             glutPostRedisplay();
             break;
-        // dodati i za space - pucanje
+        /* TODO 
+             space za pucanje
+             brojevi za izbor karaktera
+        */
     }
 }
 
@@ -123,8 +119,7 @@ static void on_keyboard(unsigned char key, int x, int y){
 //     }
 // }
 
-static void on_release(unsigned char key, int x, int y)
-{
+static void on_release(unsigned char key, int x, int y){
     switch (key)
     {
         case 'a':
@@ -169,7 +164,7 @@ static void on_timer(int value){
             x_pom = 0;
     }
     
-    z += 0.15;
+    z += 0.1;
 
     if(z > lvl.rowNumber){
         timer_active = 0;
@@ -188,7 +183,6 @@ static void on_display(void){
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
        
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(x, 1, 3-z, 
@@ -202,6 +196,7 @@ static void on_display(void){
     if(hasCollision(-0.5, lvl.levelMatrix, lvl.rowNumber)){
         timer_active = 0;
         printf("Izgubili ste. Pritisnite R za restart.\n");
+        // dodati obradu da S vise ne radi
     }
         
     glutSwapBuffers();

@@ -5,11 +5,21 @@
 
 #include "scene.h"
 #include "image.h"
+#include "light.h"
 
 #define MAX (1700)
 const static float PI = 3.141592653589793;
 
 extern Level lvl;
+
+void initialize(){
+    time_parameter = 0;
+    timer_active = 0;
+
+    x = 0;
+    x_pom = 1;
+    z = 0;
+}
 
 /* Funkcija za koordinatni sistem */
 void drawSystem(){
@@ -53,7 +63,8 @@ void drawSystem(){
 /* Funkcija za crtanje osnove */
 void drawFloor(double width){
     
-    glColor3f(0.7, 0, 0.5);
+    // glColor3f(0.7, 0, 0.5);
+    floorLight();
     
     glPushMatrix();
         glScalef(width, 1, 1);
@@ -83,7 +94,7 @@ char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
 
     char **levelMatrix = NULL;
     levelMatrix = (char**) malloc(sizeof(char*) * (*rowNumber));
-    if(*levelMatrix == NULL){
+    if(levelMatrix == NULL){
         fprintf(stderr, "Error! Unsuccessful 1st malloc.\n");
         exit(EXIT_FAILURE);
     }
@@ -118,20 +129,17 @@ void deallocLevel(char **levelMatrix, int rowNumber){
 
 /* Funkcija za iscrtavanje heal-a */
 static void drawHeal(){
-
     glPushMatrix();
-    	glColor3f(0.8, 0, 0);
-    	glTranslatef(0, 0.5, 0);
-    	glScalef(0.6, 0.2, 0.2);
-    	glutSolidCube(1);
+        glTranslatef(0, 0.5, 0);
+        glScalef(0.6, 0.2, 0.2);
+        glutSolidCube(1);
     glPopMatrix();
 
-   glPushMatrix();
-        glColor3f(0.8, 0, 0);
+    glPushMatrix();
         glTranslatef(0, 0.5, 0);
-        glScalef(0.2, 0.6, 0.3);
+        glScalef(0.2, 0.6, 0.2);
         glutSolidCube(1);
-   glPopMatrix();
+    glPopMatrix();   
 }
 
 /* Funkcija za crtanje valjka */
@@ -159,21 +167,21 @@ void drawCylinder(GLfloat radius, GLfloat height){
 static void drawEnemy(){
     // Gornji deo glave
     glPushMatrix();
-     	glColor3f(0.5, 0, 0);
-     	glTranslatef(0, 0.65, 0);
+        enemyLight(1);
+     	glTranslatef(0, 0.69, 0);
      	glutSolidSphere(0.35, 30, 30);
     glPopMatrix();
     
     // Valjak
     glPushMatrix();
-        glColor3f(0.5, 0, 0);
+        enemyLight(1);
         glRotatef(-90, 1, 0, 0);
         drawCylinder(0.35, 0.68);
     glPopMatrix();
 
     // Lice
     glPushMatrix();
-        glColor3f(0.5, 0.5, 0);
+        enemyLight(2);
         glTranslatef(0, 0.15, 0.15);
         glRotatef(-90, 1, 0, 0);
         drawCylinder(0.25, 0.45);
@@ -181,35 +189,37 @@ static void drawEnemy(){
 
     // Desno oko
     glPushMatrix();
-        glColor3f(1, 0, 0);
+        enemyLight(4);
      	glTranslatef(0.10, 0.5, 0.35);
      	glutSolidSphere(0.06, 30, 30);
     glPopMatrix();
 
     // Levo oko
     glPushMatrix();
-        glColor3f(1, 0, 0);
+        enemyLight(4);
      	glTranslatef(-0.10, 0.5, 0.35);
      	glutSolidSphere(0.06, 30, 30);
     glPopMatrix();
 
     glLineWidth(2);
-    glColor3f(0, 0, 0);
 
     // Desna obrva
     glBegin(GL_LINE_STRIP);
+        enemyLight(3);
         glVertex3f(0.06, 0.55, 0.4);
         glVertex3f(0.22, 0.6, 0.4);
     glEnd();
 
     // Leva obrva
     glBegin(GL_LINE_STRIP);
+        enemyLight(3);
         glVertex3f(-0.06, 0.55, 0.4);
         glVertex3f(-0.22, 0.6, 0.4);
     glEnd();
 
     // Usta    
     glBegin(GL_LINE_STRIP);
+        enemyLight(3);
         glVertex3f(0.15, 0.2, 0.4);
         glVertex3f(0.15, 0.3, 0.4);
         glVertex3f(0.10, 0.35, 0.4);
@@ -221,12 +231,12 @@ static void drawEnemy(){
 
 /* Funkcija za iscrtavanje objekata */
 static void drawObstacle(char type){
-    
+
     switch (type)
     {
     case '#': // cube
         glPushMatrix();
-            glColor3f(0, 0.6, 0.6);
+            cubeLight();
             glScalef(0.8, 2.0, 0.6);
             glTranslatef(0, 0.01, 0);
             glutSolidCube(1);
@@ -235,8 +245,9 @@ static void drawObstacle(char type){
     
     case 'x': // heal
         glPushMatrix();
+            healLight();
             glScalef(0.5, 3, 0);
-            glRotatef(time_parameter*10.0f, 0, 1, 0);
+            glRotatef(time_parameter*5.0f, 0, 1, 0);
             drawHeal();
         glPopMatrix();
         break;
@@ -277,6 +288,7 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
     glPopMatrix();
 }
 
+/* Funkcija za obradu kolizija */
 bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber){
     int i, j;
     if(x_pom == 0){
@@ -284,11 +296,11 @@ bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber){
         j = x_pom;
     }
     else if (x_pom == 1){
-        i = nearbyint(z+3.5); 
+        i = nearbyint(z+2.5); 
         j = x_pom;
     }
-    else{
-        i = nearbyint(z+4.8); 
+    else{ // x-pom == 2
+        i = nearbyint(z+8.6); 
         j = x_pom;
     }
     

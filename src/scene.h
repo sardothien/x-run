@@ -3,8 +3,6 @@
 
 #include <stdbool.h>
 
-typedef struct Image Image;
-
 typedef struct {
     char **levelMatrix;
     int rowNumber;
@@ -14,7 +12,10 @@ typedef struct {
 
 double x, z;
 int x_pom;
+int timer_active;
 float time_parameter;
+
+void initialize();
 
 void drawSystem();
 void drawFloor(double width);
