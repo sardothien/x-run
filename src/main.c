@@ -185,19 +185,19 @@ static void on_display(void){
        
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(x, 1, 3-z, 
-              x, 0, -3-z,
+    gluLookAt(0+x, 1, 3-z, 
+              0+x, 0, -3-z,
               0, 1, 0);
 
     //drawSystem();   
     drawFloor(2);
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
 
-    if(hasCollision(-0.5, lvl.levelMatrix, lvl.rowNumber)){
-        timer_active = 0;
-        printf("Izgubili ste. Pritisnite R za restart.\n");
-        // dodati obradu da S vise ne radi
-    }
+    // if(hasCollision(-0.5, lvl.levelMatrix, lvl.rowNumber)){
+    //     timer_active = 0;
+    //     printf("Izgubili ste. Pritisnite R za restart.\n");
+    //     // dodati obradu da S vise ne radi
+    // }
         
     glutSwapBuffers();
 }

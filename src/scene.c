@@ -131,17 +131,27 @@ void deallocLevel(char **levelMatrix, int rowNumber){
 
 /* Funkcija za iscrtavanje heal-a */
 static void drawHeal(){
+
+    // Horizontalni kvadar
     glPushMatrix();
         glTranslatef(0, 0.5, 0);
         glScalef(0.6, 0.2, 0.2);
         glutSolidCube(1);
     glPopMatrix();
 
+    // Gornji vertikalni kvadar
     glPushMatrix();
-        glTranslatef(0, 0.5, 0);
-        glScalef(0.2, 0.6, 0.2);
+        glTranslatef(0, 0.7, 0);
+        glScalef(0.2, 0.2, 0.2);
         glutSolidCube(1);
     glPopMatrix();   
+
+    // Donji vertikalni kvadar
+    glPushMatrix();
+        glTranslatef(0, 0.3, 0);
+        glScalef(0.2, 0.2, 0.2);
+        glutSolidCube(1);
+    glPopMatrix();
 }
 
 /* Funkcija za crtanje valjka */
@@ -327,7 +337,7 @@ bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber){
     }
     
     //printf("%d %d\n", i, j);
-    printf("%d\n", lives);
+    //printf("%d\n", lives);
     if (i < rowNumber){
         if (lvlMatrix[i][j] == '#')
             return true;
