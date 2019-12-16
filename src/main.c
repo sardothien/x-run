@@ -19,7 +19,8 @@ Level lvl = {
     .levelMatrix = NULL,
     .rowNumber = 0,
     .obstacleNumberInRow = 0,
-    .viewDistance = 70
+    .viewDistance = 70,
+    .backgroundID = 0
 };
 
 int main(int argc, char ** argv){
@@ -27,9 +28,11 @@ int main(int argc, char ** argv){
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutInitWindowSize(700, 700);
+    glutInitWindowSize(800, 600);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("x-run");
+
+    // glutFullScreen();
 
     glutDisplayFunc(on_display);
     glutReshapeFunc(on_reshape);
@@ -37,10 +40,13 @@ int main(int argc, char ** argv){
     // glutSpecialFunc(on_special_key);
     glutKeyboardUpFunc(on_release);
 
+    // glEnable(GL_NORMALIZE);
+
     initialize();
     initializeLight();
+    initializeTextures();
 
-    glClearColor(1, 1, 0.6, 0);
+    glClearColor(1, 1, 0, 0);
     glEnable(GL_DEPTH_TEST);
 
     /* Ucitavanje nivoa iz datoteke */
@@ -190,14 +196,17 @@ static void on_display(void){
               0, 1, 0);
 
     //drawSystem();   
+
+    drawSky(lvl.backgroundID);
     drawFloor(2);
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
 
-    // if(hasCollision(-0.5, lvl.levelMatrix, lvl.rowNumber)){
-    //     timer_active = 0;
-    //     printf("Izgubili ste. Pritisnite R za restart.\n");
-    //     // dodati obradu da S vise ne radi
-    // }
+    // TODO
+    if(hasCollision(-0.5, lvl.levelMatrix, lvl.rowNumber)){
+        timer_active = 0;
+        printf("Izgubili ste. Pritisnite R za restart.\n");
+        // dodati obradu da S vise ne radi
+    }
         
     glutSwapBuffers();
 }

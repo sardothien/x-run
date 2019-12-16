@@ -8,6 +8,7 @@ typedef struct {
     int rowNumber;
     int obstacleNumberInRow;
     int viewDistance;
+    unsigned backgroundID;
 } Level;
 
 double x, z;
@@ -19,6 +20,8 @@ int lives;
 void initialize();
 
 void drawSystem();
+
+void drawSky(unsigned textureID);
 void drawFloor(double width);
 void drawHeader();
 
@@ -26,7 +29,6 @@ char** loadLevel(char *path, int *rowNumber, int *obstacleNumberInRow);
 void deallocLevel(char **levelMatrix, int rowNumber);
 
 void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth);
-
 void drawHeart();
 
 bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber);

@@ -7,6 +7,11 @@
 #include "image.h"
 #include "light.h"
 
+// #define FILENAME0 "cerebro.bmp"
+// #define FILENAME1 "brick.bmp"
+
+extern Level lvl;
+
 void initializeLight(){
     GLfloat light_position[] = { 1, 1, 1, 0 };
     GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1 };
@@ -124,4 +129,42 @@ void heartLight(){
     // glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
 
     glColor3f(0.8, 0, 0);
+}
+
+void initializeTextures(){
+   
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_LINE_SMOOTH);
+    glEnable(GL_POINT_SMOOTH);
+
+    /* Uvitavnje teksture za pozadinu */
+    Image* background = image_init(1024, 1024);
+    image_read(background, "cerebro.bmp");
+    lvl.backgroundID = backgroundTexture(background);
+    image_done(background);
+}
+
+unsigned backgroundTexture(Image* img){
+    glEnable(GL_TEXTURE_2D);
+
+    GLuint textures;
+    glGenTextures(1, &textures);
+
+    glTexEnvf(GL_TEXTURE_ENV,
+              GL_TEXTURE_ENV_MODE,
+              GL_REPLACE);
+
+    glBindTexture(GL_TEXTURE_2D, textures);
+
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+                img->width, img->height, 0,
+                GL_RGB, GL_UNSIGNED_BYTE, img->pixels);
+
+    glDisable(GL_TEXTURE_2D);
+
+    return textures;
 }

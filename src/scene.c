@@ -62,6 +62,81 @@ void drawSystem(){
     glEnd();
 }
 
+static void drawPlane(){
+    glPushMatrix();
+        glBegin(GL_QUADS);
+            glNormal3f(0,0,1);
+            
+            glTexCoord2f(0, 0);
+            glVertex2f(-0.5, 0.5);
+
+            glTexCoord2f(0, 1);
+            glVertex2f(-0.5, -0.5);
+
+            glTexCoord2f(1, 1);
+            glVertex2f(0.5, -0.5);
+
+            glTexCoord2f(1, 0);
+            glVertex2f(0.5, 0.5);
+        glEnd();
+    glPopMatrix();
+}
+
+static void drawCube(){
+    // prednja
+    glPushMatrix();
+        glTranslatef(0,0,-0.5);
+        drawPlane();
+    glPopMatrix();
+
+    // zadnja
+    glPushMatrix();
+        glRotatef(-90, 0, 0, 1);
+        glTranslatef(0,0,0.5);
+        drawPlane();
+    glPopMatrix();
+
+    // desna
+    glPushMatrix();
+        glRotatef(90, 0, 1, 0);
+        glTranslatef(0,0,0.5);
+        drawPlane();
+    glPopMatrix();
+
+    // leva
+    glPushMatrix();
+        glRotatef(-90, 0, 1, 0);
+        glTranslatef(0,0,0.5);
+        drawPlane();
+    glPopMatrix();
+
+    // donja 
+    glPushMatrix();
+        glRotatef(90, 1, 0, 0);
+        glTranslatef(0,0,0.5);
+        drawPlane();
+    glPopMatrix();
+
+    // gornja 
+    glPushMatrix();
+        glRotatef(-90, 1, 0, 0);
+        glTranslatef(0,0,0.5);
+        drawPlane();
+    glPopMatrix();
+}
+
+void drawSky(unsigned textureID){
+    glPushMatrix();
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        
+        glScalef(800,800,1000);
+        drawCube();
+
+        glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
+}
+
 /* Funkcija za crtanje osnove */
 void drawFloor(double width){
     
