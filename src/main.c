@@ -6,6 +6,9 @@
 #include "image.h"
 #include "light.h"
 
+#define TIMER_ID 0
+#define TIMER_INTERVAL 50
+
 static void on_display(void);
 static void on_timer(int value);
 static void on_reshape(int width, int height);
@@ -40,13 +43,11 @@ int main(int argc, char ** argv){
     // glutSpecialFunc(on_special_key);
     glutKeyboardUpFunc(on_release);
 
-    // glEnable(GL_NORMALIZE);
-
     initialize();
     initializeLight();
     initializeTextures();
 
-    glClearColor(1, 1, 0, 0);
+    glClearColor(0, 0, 0, 0);
     glEnable(GL_DEPTH_TEST);
 
     /* Ucitavanje nivoa iz datoteke */
@@ -71,8 +72,8 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 'S':
             // start game
             if(!timer_active){
+                glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
                 timer_active = 1;
-                glutTimerFunc(50, on_timer, 0);
             }
             printf("start\n");
             break;
@@ -151,7 +152,7 @@ static void on_reshape(int width, int height){
 
 static void on_timer(int value){
     
-    if(value != 0)
+    if(value != TIMER_ID)
         return;
     
     if(moves[0] && x != 3){
@@ -182,7 +183,7 @@ static void on_timer(int value){
    glutPostRedisplay();
     
     if(timer_active)
-        glutTimerFunc(50, on_timer, 0);
+        glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
 }
 
 static void on_display(void){
