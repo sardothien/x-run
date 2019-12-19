@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "logic.h"
 #include "scene.h"
 #include "image.h"
 #include "light.h"
@@ -12,7 +13,6 @@
 static void on_display(void);
 static void on_timer(int value);
 static void on_reshape(int width, int height);
-// static void on_special_key(int key, int x, int y);
 static void on_release(unsigned char key, int x, int y);
 static void on_keyboard(unsigned char key, int x, int y);
 
@@ -35,12 +35,11 @@ int main(int argc, char ** argv){
     glutInitWindowPosition(100, 100);
     glutCreateWindow("x-run");
 
-    // glutFullScreen();
+    glutFullScreen();
 
     glutDisplayFunc(on_display);
     glutReshapeFunc(on_reshape);
     glutKeyboardFunc(on_keyboard);
-    // glutSpecialFunc(on_special_key);
     glutKeyboardUpFunc(on_release);
 
     initialize();
@@ -71,7 +70,7 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 's':
         case 'S':
             // start game
-            if(!timer_active){
+            if(!timer_active && z < lvl.rowNumber){
                 glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
                 timer_active = 1;
             }
@@ -85,7 +84,7 @@ static void on_keyboard(unsigned char key, int x, int y){
             break;
         case 'r':
         case 'R': 
-            // restart - trenutno ne radi x koordinata
+            // restart
             initialize();
             glutPostRedisplay();
             printf("restart\n");
@@ -106,25 +105,9 @@ static void on_keyboard(unsigned char key, int x, int y){
             break;
         /* TODO 
              space za pucanje
-             brojevi za izbor karaktera
         */
     }
 }
-
-// static void on_special_key(int key, int x, int y){
-//     switch(key){
-//         case GLUT_KEY_LEFT:
-//             printf("right\n");
-//             moves[1] = 1;
-//             glutPostRedisplay();
-//             break;
-//         case GLUT_KEY_RIGHT:
-//             printf("left\n");
-//             moves[0] = 1;
-//             glutPostRedisplay();
-//             break;
-//     }
-// }
 
 static void on_release(unsigned char key, int x, int y){
     switch (key)
@@ -171,7 +154,7 @@ static void on_timer(int value){
             x_pom = 0;
     }
     
-    z += 0.1;
+    z += 0.125 + 0.00001*z;
 
     if(z > lvl.rowNumber){
         timer_active = 0;
@@ -192,8 +175,8 @@ static void on_display(void){
        
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0+x, 1, 3-z, 
-              0+x, 0, -3-z,
+    gluLookAt(x*1.0, 1, 3-z, 
+              x*1.0, 0, -3-z,
               0, 1, 0);
 
     //drawSystem();   
@@ -202,7 +185,10 @@ static void on_display(void){
     drawFloor(2);
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
 
+    drawHearts();
+
     // TODO
+    // hasCollision(x, z, -0.5, lvl.levelMatrix, lvl.rowNumber)
     if(hasCollision(-0.5, lvl.levelMatrix, lvl.rowNumber)){
         timer_active = 0;
         printf("Izgubili ste. Pritisnite R za restart.\n");

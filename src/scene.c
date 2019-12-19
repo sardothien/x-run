@@ -3,25 +3,14 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "logic.h"
 #include "scene.h"
 #include "image.h"
 #include "light.h"
 
-#define MAX (1700)
 const static float PI = 3.141592653589793;
 
 extern Level lvl;
-
-void initialize(){
-    time_parameter = 0;
-    timer_active = 0;
-
-    x = 0;
-    x_pom = 1;
-    z = 0;
-
-    lives = 3;
-}
 
 /* Funkcija za koordinatni sistem */
 void drawSystem(){
@@ -140,7 +129,6 @@ void drawSky(unsigned textureID){
 /* Funkcija za crtanje osnove */
 void drawFloor(double width){
     
-    // glColor3f(0.7, 0, 0.5);
     floorLight();
     
     glPushMatrix();
@@ -152,56 +140,6 @@ void drawFloor(double width){
             glVertex3f(-2.5, -1, 10);
         glEnd();
     glPopMatrix();
-}
-
-/* Funkcija za ucitavanje nivoa iz datoteke */
-char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
-
-    FILE *in;
-    in = fopen(path, "r");
-    if(in == NULL){
-        fprintf(stderr, "Error! Couldn't open file.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    char buffer[MAX];
-
-    fscanf(in, "%d\n", rowNumber);
-    fscanf(in, "%d\n", obstacleNumberInRow);
-
-    char **levelMatrix = NULL;
-    levelMatrix = (char**) malloc(sizeof(char*) * (*rowNumber));
-    if(levelMatrix == NULL){
-        fprintf(stderr, "Error! Unsuccessful 1st malloc.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    int i = 0;
-    while(fgets(buffer, 100, in) != NULL){
-
-        levelMatrix[i] = NULL;
-        levelMatrix[i] = (char*) malloc(sizeof(char) * (*obstacleNumberInRow));
-        if(levelMatrix[i] == NULL){
-            deallocLevel(levelMatrix, i);
-            fprintf(stderr, "Error! Unsuccessful 2nd malloc.");
-            exit(EXIT_FAILURE);
-        }
-        else{
-            for(int j = 0; j < *obstacleNumberInRow; j++)
-                levelMatrix[i][j] = buffer[j*2];
-        }
-
-        i++;
-    }
-
-    return levelMatrix;
-}
-
-/* Brisanje nivoa i oslobadjanje memorije */
-void deallocLevel(char **levelMatrix, int rowNumber){
-    for (int i = 0; i < rowNumber; i++)
-        free(levelMatrix[i]);
-    free(levelMatrix);
 }
 
 /* Funkcija za iscrtavanje heal-a */
@@ -375,60 +313,38 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
     glPopMatrix();
 }
 
-void drawHeart(){
-    //glDisable(GL_LIGHTING);
-
-    heartLight();
-    //glColor3f(0.8, 0, 0);
-    
+static void drawHeart(){
+    glScalef(0.15, 0.15, 0.15);
     glPushMatrix();
-        glutSolidSphere(0.2, 20, 20);
-        glTranslatef(0.23, 0, 0);
-        glutSolidSphere(0.2, 20, 20);
-        glTranslatef(-0.12, -0.12, 0);
-        glRotatef(45, 0, 0, 1);
-        glutSolidCube(0.31);
+        glutSolidSphere(0.2, 30, 30);
+        glTranslatef(0.4, 0, 0);
+        glutSolidSphere(0.2, 30, 30);
+        glScalef(1.4, 1.4, 0.2);
+        glTranslatef(-0.15, -0.15, 0);
+        glRotatef(50, 0, 0, 1);
+        glRotatef(-5, 0, 0, 1);
+        glutSolidCube(0.30);
 	glPopMatrix();
-
-    //glEnable(GL_LIGHTING);
 }
 
-/* Funkcija za obradu kolizija */
-bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber){
-    int i, j;
+void drawHearts(){
 
-    // rade dobro samo za #
-    if(x_pom == 0){
-        i = nearbyint(z+2.5); 
-        j = x_pom;
-    }
-    else if (x_pom == 1){
-        i = nearbyint(z+2.5); 
-        j = x_pom;
-    }
-    else{ // x-pom == 2
-        i = nearbyint(z+8.6); 
-        j = x_pom;
-    }
-    
-    //printf("%d %d\n", i, j);
-    //printf("%d\n", lives);
-    if (i < rowNumber){
-        if (lvlMatrix[i][j] == '#')
-            return true;
-        else if (lvlMatrix[i][j] == 'o')
-        {
-            // TODO - gubi se zivot
-        }
-        else if (lvlMatrix[i][j] == 'x')
-        {
-            if (lives < 3)
-                lives++;
-        }
+    glDisable(GL_LIGHTING);
 
-        if (lives == 0)
-            return true;
-    }        
+    heartLight();
 
-    return false;
+    int health = lives;
+    int i = 1;
+    while(health){
+        glPushMatrix();
+            glTranslatef(-1.6 + (health-i)*0.1 + x, 2.0, 0-z);
+            glRotatef(25, 0, 1, 0);
+            glRotatef(-25, 1, 0, 0);
+            drawHeart();
+        glPopMatrix();
+        i++;
+        health--;
+    }
+
+    glEnable(GL_LIGHTING);
 }
