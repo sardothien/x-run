@@ -16,8 +16,6 @@ static void on_reshape(int width, int height);
 static void on_release(unsigned char key, int x, int y);
 static void on_keyboard(unsigned char key, int x, int y);
 
-static int moves[] = {0, 0};
-
 Level lvl = {
     .levelMatrix = NULL,
     .rowNumber = 0,
@@ -35,7 +33,7 @@ int main(int argc, char ** argv){
     glutInitWindowPosition(100, 100);
     glutCreateWindow("x-run");
 
-    glutFullScreen();
+    //glutFullScreen();
 
     glutDisplayFunc(on_display);
     glutReshapeFunc(on_reshape);
@@ -62,14 +60,14 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 27: 
         case 'q':
         case 'Q':
-            // quit/exit
+            // izlaz iz igre
             deallocLevel(lvl.levelMatrix, lvl.rowNumber);
             printf("Izašli ste iz igre.\n");
             exit(0);
             break;
         case 's':
         case 'S':
-            // start game
+            // pocetak/nastavak igre
             if(!timer_active && z < lvl.rowNumber){
                 glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
                 timer_active = 1;
@@ -78,7 +76,7 @@ static void on_keyboard(unsigned char key, int x, int y){
             break;
         case 'p':
         case 'P':
-            // pause
+            // pauziranje
             timer_active = 0;
             printf("pause\n");
             break;
@@ -138,23 +136,29 @@ static void on_timer(int value){
     if(value != TIMER_ID)
         return;
     
-    if(moves[0] && x != 3){
-        x += 1;
-        if(x < 1)
+    if(moves[0] && x <= 2.5){ // ide desno
+        x += 1.1;
+
+        if(x >= -3 && x <= -1.5)
+            x_pom = 0;
+        else if(x > -1.5 && x < 1.5)
             x_pom = 1;
-        else
+        else if(x >= 1.5 && x <= 3)
             x_pom = 2;
     }
     
-    if(moves[1] && x != -3){
-        x -= 1;
-        if (x > -1)
-            x_pom = 1;
-        else
+    if(moves[1] && x >= -2.5){ // ide levo
+        x -= 1.1;
+
+        if(x >= -3 && x <= -1.5)
             x_pom = 0;
+        else if(x > -1.5 && x < 1.5)
+            x_pom = 1;
+        else if(x >= 1.5 && x <= 3)
+            x_pom = 2;
     }
     
-    z += 0.125 + 0.00001*z;
+    z += 0.1;
 
     if(z > lvl.rowNumber){
         timer_active = 0;
@@ -175,8 +179,8 @@ static void on_display(void){
        
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(x*1.0, 1, 3-z, 
-              x*1.0, 0, -3-z,
+    gluLookAt(x*1.0, 1, 3, 
+              x*1.0, 0, -3,
               0, 1, 0);
 
     //drawSystem();   
@@ -187,9 +191,11 @@ static void on_display(void){
 
     drawHearts();
 
+    //printf("%d\n", dodatak);
+    // printf("%d %d\n", (int)z+ dodatak, x_pom);
+
     // TODO
-    // hasCollision(x, z, -0.5, lvl.levelMatrix, lvl.rowNumber)
-    if(hasCollision(-0.5, lvl.levelMatrix, lvl.rowNumber)){
+    if(hasCollision(lvl.levelMatrix, lvl.rowNumber)){
         timer_active = 0;
         printf("Izgubili ste. Pritisnite R za restart.\n");
         // dodati obradu da S vise ne radi

@@ -16,6 +16,9 @@ void initialize(){
     time_parameter = 0;
     timer_active = 0;
 
+    moves[0] = 0;
+    moves[1] = 0;
+
     x = 0;
     x_pom = 1;
     z = 0;
@@ -74,32 +77,27 @@ void deallocLevel(char **levelMatrix, int rowNumber){
 }
 
 /* Funkcija za obradu kolizija */
-bool hasCollision(double minPosition, char** lvlMatrix, int rowNumber){
-    int i, j;
-
-    // rade dobro samo za #
-    if(x_pom == 0){
-        i = nearbyint(z+2.5); 
-        j = x_pom;
-    }
-    else if (x_pom == 1){
-        i = nearbyint(z+2.5); 
-        j = x_pom;
-    }
-    else{ // x-pom == 2
-        i = nearbyint(z+8.6); 
-        j = x_pom;
-    }
+bool hasCollision(char** lvlMatrix, int rowNumber){
     
-    //printf("%d %d\n", i, j);
+    
+    int i = (int)z;
+    int j = x_pom; 
+    
+    
+    // printf("%d %d\n", i, j);
     //printf("%d\n", lives);
     if (i < rowNumber){
-        if (lvlMatrix[i][j] == '#')
+        if (lvlMatrix[i][j] == '#'){
             return true;
-        else if (lvlMatrix[i][j] == 'o')
+        }
+        else if (lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o')
         {   
-            //lives--;
-            // TODO - gubi se zivot
+            // if(enemyNotShot()){
+            //     lives--;
+            // }
+            // else{
+            //     enemyDisappear();
+            // }
         }
         else if (lvlMatrix[i][j] == 'x')
         {

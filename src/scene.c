@@ -18,7 +18,7 @@ void drawSystem(){
     glLineWidth(1);
     
     // x-osa
-    glColor3f(0, 0, 1);
+    glColor3f(1, 0, 0);
     glBegin(GL_LINES);
         glVertex3f(0, 0, 0);
         glVertex3f(200, 0, 0);
@@ -29,7 +29,7 @@ void drawSystem(){
     glEnd();
     
     // y-osa
-    glColor3f(1, 0, 0);
+    glColor3f(0, 1, 0);
     glBegin(GL_LINES);
         glVertex3f(0, 0, 0);
         glVertex3f(0, 200, 0);
@@ -40,7 +40,7 @@ void drawSystem(){
     glEnd();
 
     // z-osa
-    glColor3f(0, 1, 0);
+    glColor3f(0, 0, 1);
     glBegin(GL_LINES);
         glVertex3f(0, 0, 0);
         glVertex3f(0, 0, 200);
@@ -126,7 +126,7 @@ void drawSky(unsigned textureID){
     glPopMatrix();
 }
 
-/* Funkcija za crtanje osnove */
+/* Funkcija za crtanje staze */
 void drawFloor(double width){
     
     floorLight();
@@ -262,7 +262,7 @@ static void drawObstacle(char type){
     case '#': // cube
         glPushMatrix();
             cubeLight();
-            glScalef(0.8, 2.0, 0.6);
+            glScalef(1.0, 3.0, 1.0);
             glTranslatef(0, 0.01, 0);
             glutSolidCube(1);
         glPopMatrix();
@@ -337,7 +337,7 @@ void drawHearts(){
     int i = 1;
     while(health){
         glPushMatrix();
-            glTranslatef(-1.6 + (health-i)*0.1 + x, 2.0, 0-z);
+            glTranslatef(-1.6 + (health-i)*0.1 + x, 2.0, 0);
             glRotatef(25, 0, 1, 0);
             glRotatef(-25, 1, 0, 0);
             drawHeart();
