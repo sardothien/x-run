@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "logic.h"
-#include "scene.h"
-#include "image.h"
-#include "light.h"
+#include "./headers/logic.h"
+#include "./headers/scene.h"
+#include "./headers/image.h"
+#include "./headers/light.h"
 
 #define TIMER_ID 0
 #define TIMER_INTERVAL 50
@@ -89,21 +89,22 @@ static void on_keyboard(unsigned char key, int x, int y){
             break;
         case 'a':
         case 'A':
-            // levo
+            // skretanje levo
             printf("left\n");
             moves[1] = 1;
             glutPostRedisplay();
             break;
         case 'd':
         case 'D':
-            // desno
+            // skretanje desno
             printf("right\n");
             moves[0] = 1;
             glutPostRedisplay();
             break;
-        /* TODO 
-             space za pucanje
-        */
+        case 32:
+            // gadjanje
+            //fire();
+            break;
     }
 }
 
@@ -136,7 +137,7 @@ static void on_timer(int value){
     if(value != TIMER_ID)
         return;
     
-    if(moves[0] && x <= 2.5){ // ide desno
+    if(moves[0] && x <= 2.5){ // skrece desno
         x += 1.1;
 
         if(x >= -3 && x <= -1.5)
@@ -147,7 +148,7 @@ static void on_timer(int value){
             x_pom = 2;
     }
     
-    if(moves[1] && x >= -2.5){ // ide levo
+    if(moves[1] && x >= -2.5){ // skrece levo
         x -= 1.1;
 
         if(x >= -3 && x <= -1.5)
@@ -167,7 +168,7 @@ static void on_timer(int value){
     
     time_parameter++;
 
-   glutPostRedisplay();
+    glutPostRedisplay();
     
     if(timer_active)
         glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
@@ -191,14 +192,11 @@ static void on_display(void){
 
     drawHearts();
 
-    //printf("%d\n", dodatak);
-    // printf("%d %d\n", (int)z+ dodatak, x_pom);
-
-    // TODO
     if(hasCollision(lvl.levelMatrix, lvl.rowNumber)){
         timer_active = 0;
         printf("Izgubili ste. Pritisnite R za restart.\n");
         // dodati obradu da S vise ne radi
+        // dodati ekran na kom pise Game Over ili slicno
     }
         
     glutSwapBuffers();

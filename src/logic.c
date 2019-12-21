@@ -3,15 +3,16 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "logic.h"
-#include "scene.h"
-#include "image.h"
-#include "light.h"
+#include "./headers/logic.h"
+#include "./headers/scene.h"
+#include "./headers/image.h"
+#include "./headers/light.h"
 
 #define MAX (1700)
 
 extern Level lvl;
 
+/* Inicijalizacija globalnih promenljivih */
 void initialize(){
     time_parameter = 0;
     timer_active = 0;
@@ -78,33 +79,41 @@ void deallocLevel(char **levelMatrix, int rowNumber){
 
 /* Funkcija za obradu kolizija */
 bool hasCollision(char** lvlMatrix, int rowNumber){
-    
-    
+        
     int i = (int)z;
     int j = x_pom; 
-    
-    
-    // printf("%d %d\n", i, j);
-    //printf("%d\n", lives);
+       
     if (i < rowNumber){
-        if (lvlMatrix[i][j] == '#'){
+        /* Prilikom sudara sa kockom gubi se jedan zivot. */
+        if (lvlMatrix[i][j] == '#'){ 
             return true;
+            // if(lives == 3)
+            //     lives = 2;
+            // else if(lives == 2)
+            //     lives = 1;
+            // else if(lives == 1){
+            //     lives = 0;
+            // }
         }
-        else if (lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o')
-        {   
+        /* Prilikom prolaska pored objekta enemy, u slucaju da ga nismo pogodili,
+           gubimo jedan zivot. Inace, on menja boju u sivu. */
+        else if (lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o'){   
             // if(enemyNotShot()){
             //     lives--;
             // }
             // else{
             //     enemyDisappear();
+            //     ili boja enemy postaje siva
             // }
         }
-        else if (lvlMatrix[i][j] == 'x')
-        {
+        /* U slucaju nailaska na simbol heal, ako nemamo sve zivote, dobijamo
+           jedan dodatan zivot. */
+        else if (lvlMatrix[i][j] == 'x'){
             if (lives < 3)
                 lives++;
         }
 
+        /* Ako imamo 0 zivota, izgubili smo. */
         if (lives == 0)
             return true;
     }        

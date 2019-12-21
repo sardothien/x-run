@@ -3,16 +3,16 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "logic.h"
-#include "scene.h"
-#include "image.h"
-#include "light.h"
+#include "./headers/logic.h"
+#include "./headers/scene.h"
+#include "./headers/image.h"
+#include "./headers/light.h"
 
 const static float PI = 3.141592653589793;
 
 extern Level lvl;
 
-/* Funkcija za koordinatni sistem */
+/* Funkcija za iscrtavanje koordinatnog sistema */
 void drawSystem(){
     
     glLineWidth(1);
@@ -51,6 +51,7 @@ void drawSystem(){
     glEnd();
 }
 
+/* Pomocna funkcija za iscrtavanje ravni */
 static void drawPlane(){
     glPushMatrix();
         glBegin(GL_QUADS);
@@ -71,42 +72,43 @@ static void drawPlane(){
     glPopMatrix();
 }
 
+/* Pomocna funkcija za iscrtavanje kocke */
 static void drawCube(){
-    // prednja
+    // prednja stranica
     glPushMatrix();
         glTranslatef(0,0,-0.5);
         drawPlane();
     glPopMatrix();
 
-    // zadnja
+    // zadnja stranica
     glPushMatrix();
         glRotatef(-90, 0, 0, 1);
         glTranslatef(0,0,0.5);
         drawPlane();
     glPopMatrix();
 
-    // desna
+    // desna stranica
     glPushMatrix();
         glRotatef(90, 0, 1, 0);
         glTranslatef(0,0,0.5);
         drawPlane();
     glPopMatrix();
 
-    // leva
+    // leva stranica
     glPushMatrix();
         glRotatef(-90, 0, 1, 0);
         glTranslatef(0,0,0.5);
         drawPlane();
     glPopMatrix();
 
-    // donja 
+    // donja stranica
     glPushMatrix();
         glRotatef(90, 1, 0, 0);
         glTranslatef(0,0,0.5);
         drawPlane();
     glPopMatrix();
 
-    // gornja 
+    // gornja stranica
     glPushMatrix();
         glRotatef(-90, 1, 0, 0);
         glTranslatef(0,0,0.5);
@@ -114,6 +116,7 @@ static void drawCube(){
     glPopMatrix();
 }
 
+/* Funkcija za iscrtavanje neba */
 void drawSky(unsigned textureID){
     glPushMatrix();
         glEnable(GL_TEXTURE_2D);
@@ -129,7 +132,8 @@ void drawSky(unsigned textureID){
 /* Funkcija za crtanje staze */
 void drawFloor(double width){
     
-    floorLight();
+    // osvetljenje/boja
+    elementsLight(1);
     
     glPushMatrix();
         glScalef(width, 1, 1);
@@ -142,7 +146,7 @@ void drawFloor(double width){
     glPopMatrix();
 }
 
-/* Funkcija za iscrtavanje heal-a */
+/* Funkcija za iscrtavanje objekta heal */
 static void drawHeal(){
 
     // Horizontalni kvadar
@@ -167,28 +171,28 @@ static void drawHeal(){
     glPopMatrix();
 }
 
-/* Funkcija za crtanje valjka */
-void drawCylinder(GLfloat radius, GLfloat height){
+/* Pomocna funkcija za crtanje valjka */
+static void drawCylinder(GLfloat radius, GLfloat height){
     GLfloat x = 0.0;
     GLfloat y = 0.0;
     GLfloat angle = 0.0;
-    GLfloat angle_stepsize = 0.1;
+    GLfloat step = 0.1;
 
     glBegin(GL_QUAD_STRIP);
         angle = 0.0;
-        while( angle < 2*PI ) {
+        while(angle < 2*PI) {
             x = radius * cos(angle);
             y = radius * sin(angle);
-            glVertex3f(x, y , height);
-            glVertex3f(x, y , 0.0);
-            angle = angle + angle_stepsize;
+            glVertex3f(x, y, height);
+            glVertex3f(x, y, 0.0);
+            angle += step;
         }
         glVertex3f(radius, 0.0, height);
         glVertex3f(radius, 0.0, 0.0);
     glEnd();
 }
 
-/* Funkcija za iscrtavanje enemy-a */
+/* Funkcija za iscrtavanje objekta enemy */
 static void drawEnemy(){
     // Gornji deo glave
     glPushMatrix();
@@ -257,38 +261,36 @@ static void drawEnemy(){
 /* Funkcija za iscrtavanje objekata */
 static void drawObstacle(char type){
 
-    switch (type)
-    {
-    case '#': // cube
-        glPushMatrix();
-            cubeLight();
-            glScalef(1.0, 3.0, 1.0);
-            glTranslatef(0, 0.01, 0);
-            glutSolidCube(1);
-        glPopMatrix();
-        break;
-    
-    case 'x': // heal
-        glPushMatrix();
-            healLight();
-            glScalef(0.5, 3, 0);
-            glRotatef(time_parameter*5.0f, 0, 1, 0);
-            drawHeal();
-        glPopMatrix();
-        break;
+    switch (type){
+        case '#': // cube
+            glPushMatrix();
+                elementsLight(2);
+                glScalef(1.0, 3.3, 1.0);
+                glTranslatef(0, 0.01, 0);
+                glutSolidCube(1);
+            glPopMatrix();
+            break;
+        
+        case 'x': // heal
+            glPushMatrix();
+                elementsLight(3);
+                glScalef(0.5, 3, 0);
+                glRotatef(time_parameter*5.0f, 0, 1, 0);
+                drawHeal();
+            glPopMatrix();
+            break;
 
-    case 'o': // enemy
-        glPushMatrix();
-            glTranslatef(0, sin(time_parameter / 2.0f) * 0.5f, 0);
-            glScalef(0.7, 4, 0.7);
-            drawEnemy();
-        glPopMatrix();
-        break;
-    default:
-        break;
+        case 'o': // enemy
+            glPushMatrix();
+                glTranslatef(0, sin(time_parameter / 2.0f) * 0.5f, 0);
+                glScalef(0.7, 4, 0.7);
+                drawEnemy();
+            glPopMatrix();
+            break;
     }
 }
 
+/* Funkcija za smestanje objekata na odgovarajuce mesto i njihovo iscrtavanje */
 void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth){
 
     glPushMatrix();
@@ -313,12 +315,16 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
     glPopMatrix();
 }
 
+/* Funkcija za iscrtavanje pojedinacnog srca */
 static void drawHeart(){
+
     glScalef(0.15, 0.15, 0.15);
     glPushMatrix();
         glutSolidSphere(0.2, 30, 30);
+
         glTranslatef(0.4, 0, 0);
         glutSolidSphere(0.2, 30, 30);
+
         glScalef(1.4, 1.4, 0.2);
         glTranslatef(-0.15, -0.15, 0);
         glRotatef(50, 0, 0, 1);
@@ -327,11 +333,13 @@ static void drawHeart(){
 	glPopMatrix();
 }
 
+/* Funkcija za pozicioniranje i iscrtavanje srca 
+   u gornjem levom uglu ekrana */
 void drawHearts(){
 
     glDisable(GL_LIGHTING);
 
-    heartLight();
+    elementsLight(4);
 
     int health = lives;
     int i = 1;

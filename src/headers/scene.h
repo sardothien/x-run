@@ -5,7 +5,6 @@ void drawSystem();
 
 void drawSky(unsigned textureID);
 void drawFloor(double width);
-void drawHeader();
 
 void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth);
 void drawHearts();

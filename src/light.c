@@ -3,13 +3,14 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "logic.h"
-#include "scene.h"
-#include "image.h"
-#include "light.h"
+#include "./headers/logic.h"
+#include "./headers/scene.h"
+#include "./headers/image.h"
+#include "./headers/light.h"
 
 extern Level lvl;
 
+/* Inicijalizacija osvetljenja */
 void initializeLight(){
     GLfloat light_position[] = {1, 1, 1, 0};
     GLfloat light_ambient[] = {0.3, 0.3, 0.3, 1};
@@ -27,10 +28,7 @@ void initializeLight(){
     glEnable(GL_COLOR_MATERIAL);
 }
 
-void floorLight(){
-    glColor3f(0.7, 0.5, 0.5);
-}
-
+/* Osvetljenje kod objekta enemy */
 void enemyLight(int part){
 
     switch(part){
@@ -54,21 +52,25 @@ void enemyLight(int part){
     }
 }
 
-void cubeLight(){
-
-    glColor3f(0, 0.7, 0.2);
+/* Osvetljenje raznih objekata na sceni */
+void elementsLight(int part){
+    switch (part){
+        case 1: // osvetljenje/boja poda
+            glColor3f(0.7, 0.5, 0.5);
+            break;
+        case 2: // osvetljenje/boja kvadra
+            glColor3f(0, 0.7, 0.2);
+            break;
+        case 3: // osvetljenje/boja objekta heal
+            glColor3f(0.8, 0, 0);
+            break;
+        case 4: // osvetljenje/boja srca
+            glColor3f(0.6, 0, 0);
+            break;
+    }
 }
 
-void healLight(){
-
-    glColor3f(0.8, 0, 0);
-}
-
-void heartLight(){
-
-    glColor3f(0.6, 0, 0);
-}
-
+/* Inicijalizacija tekstura */
 void initializeTextures(){
    
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -82,6 +84,7 @@ void initializeTextures(){
     image_done(background);
 }
 
+/* Postavljanje teksture za pozadinu */
 unsigned backgroundTexture(Image* img){
     glEnable(GL_TEXTURE_2D);
 

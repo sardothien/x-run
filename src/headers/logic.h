@@ -28,6 +28,8 @@ void initialize();
 char** loadLevel(char *path, int *rowNumber, int *obstacleNumberInRow);
 void deallocLevel(char **levelMatrix, int rowNumber);
 
+// void fire();
+
 bool hasCollision(char** lvlMatrix, int rowNumber);
      
 #endif

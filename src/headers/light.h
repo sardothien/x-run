@@ -5,9 +5,7 @@ void initializeLight();
 
 void floorLight();
 void enemyLight(int part);
-void healLight();
-void cubeLight();
-void heartLight();
+void elementsLight(int part);
 
 void initializeTextures();
 unsigned backgroundTexture(Image* img);
