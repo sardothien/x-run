@@ -159,7 +159,7 @@ static void on_timer(int value){
             x_pom = 2;
     }
     
-    z += 0.1;
+    z += 0.2;
 
     if(z > lvl.rowNumber){
         timer_active = 0;

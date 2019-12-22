@@ -25,6 +25,7 @@ void initialize(){
     z = 0;
 
     lives = 3;
+    hit = 0;
 }
 
 /* Funkcija za ucitavanje nivoa iz datoteke */
@@ -85,19 +86,13 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
        
     if (i < rowNumber){
         /* Prilikom sudara sa kockom gubi se jedan zivot. */
-        if (lvlMatrix[i][j] == '#'){ 
-            return true;
-            // if(lives == 3)
-            //     lives = 2;
-            // else if(lives == 2)
-            //     lives = 1;
-            // else if(lives == 1){
-            //     lives = 0;
-            // }
+        if (lvlMatrix[i][j] == '#' && hit == 0){ 
+            lives--;
+            hit = 1;
         }
         /* Prilikom prolaska pored objekta enemy, u slucaju da ga nismo pogodili,
            gubimo jedan zivot. Inace, on menja boju u sivu. */
-        else if (lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o'){   
+        else if ((lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o') && hit == 0){   
             // if(enemyNotShot()){
             //     lives--;
             // }
@@ -105,12 +100,19 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
             //     enemyDisappear();
             //     ili boja enemy postaje siva
             // }
+            lives--;
+            hit = 1;
         }
         /* U slucaju nailaska na simbol heal, ako nemamo sve zivote, dobijamo
            jedan dodatan zivot. */
-        else if (lvlMatrix[i][j] == 'x'){
+        else if (lvlMatrix[i][j] == 'x' && hit == 0){
             if (lives < 3)
                 lives++;
+            hit = 1;
+        }
+        else if(lvlMatrix[i][j] != '#' && lvlMatrix[i][j] != 'x'
+             && lvlMatrix[i][0] != 'o' && lvlMatrix[i][1] != 'o' && lvlMatrix[i][2] != 'o'){
+            hit = 0;
         }
 
         /* Ako imamo 0 zivota, izgubili smo. */

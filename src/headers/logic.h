@@ -15,6 +15,7 @@ int moves[2];
 
 double x, z;
 int x_pom;
+int hit;
 int timer_active;
 float time_parameter;
 int lives;
