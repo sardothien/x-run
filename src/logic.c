@@ -26,6 +26,8 @@ void initialize(){
 
     lives = 3;
     hit = 0;
+
+    sword = 0;
 }
 
 /* Funkcija za ucitavanje nivoa iz datoteke */
@@ -114,6 +116,8 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
              && lvlMatrix[i][0] != 'o' && lvlMatrix[i][1] != 'o' && lvlMatrix[i][2] != 'o'){
             hit = 0;
         }
+
+       // mac[k][j] lvlMatrix[i][2] i-3 <= K <=i 
 
         /* Ako imamo 0 zivota, izgubili smo. */
         if (lives == 0)

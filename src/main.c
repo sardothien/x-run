@@ -83,6 +83,7 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 'r':
         case 'R': 
             // restart
+            // TODO - nestaje metak
             initialize();
             glutPostRedisplay();
             printf("restart\n");
@@ -103,7 +104,9 @@ static void on_keyboard(unsigned char key, int x, int y){
             break;
         case 32:
             // gadjanje
-            //fire();
+            if(timer_active){
+                sword = 1;
+            }
             break;
     }
 }
@@ -139,25 +142,18 @@ static void on_timer(int value){
     
     if(moves[0] && x <= 2.5){ // skrece desno
         x += 1.1;
-
-        if(x >= -3 && x <= -1.5)
-            x_pom = 0;
-        else if(x > -1.5 && x < 1.5)
-            x_pom = 1;
-        else if(x >= 1.5 && x <= 3)
-            x_pom = 2;
     }
     
     if(moves[1] && x >= -2.5){ // skrece levo
         x -= 1.1;
-
-        if(x >= -3 && x <= -1.5)
-            x_pom = 0;
-        else if(x > -1.5 && x < 1.5)
-            x_pom = 1;
-        else if(x >= 1.5 && x <= 3)
-            x_pom = 2;
     }
+
+    if(x >= -3 && x <= -1.5)
+        x_pom = 0;
+    else if(x > -1.5 && x < 1.5)
+        x_pom = 1;
+    else if(x >= 1.5 && x <= 3)
+        x_pom = 2;
     
     z += 0.2;
 
@@ -191,6 +187,10 @@ static void on_display(void){
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
 
     drawHearts();
+
+    if(sword){
+        drawSword();
+    }
 
     if(hasCollision(lvl.levelMatrix, lvl.rowNumber)){
         timer_active = 0;

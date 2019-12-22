@@ -19,17 +19,12 @@ int hit;
 int timer_active;
 float time_parameter;
 int lives;
-double param;
-int dodatak;
-int d;
-double p;
+int sword;
 
 void initialize();
 
 char** loadLevel(char *path, int *rowNumber, int *obstacleNumberInRow);
 void deallocLevel(char **levelMatrix, int rowNumber);
-
-// void fire();
 
 bool hasCollision(char** lvlMatrix, int rowNumber);
      

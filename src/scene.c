@@ -356,3 +356,11 @@ void drawHearts(){
 
     glEnable(GL_LIGHTING);
 }
+
+void drawSword(){
+    glPushMatrix();
+        glColor3f(0, 0, 1);
+        glTranslatef(x, 0.2, -z+time_parameter/5.0f);
+        glutSolidSphere(0.08, 20, 20);
+    glPopMatrix();
+}

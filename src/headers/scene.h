@@ -8,5 +8,7 @@ void drawFloor(double width);
 
 void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth);
 void drawHearts();
+
+void drawSword();
      
 #endif
