@@ -28,6 +28,7 @@ void initialize(){
     hit = 0;
 
     sword = 0;
+    notKilled = 1;
 }
 
 /* Funkcija za ucitavanje nivoa iz datoteke */
@@ -92,19 +93,20 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
             lives--;
             hit = 1;
         }
+
         /* Prilikom prolaska pored objekta enemy, u slucaju da ga nismo pogodili,
            gubimo jedan zivot. Inace, on menja boju u sivu. */
-        else if ((lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o') && hit == 0){   
-            // if(enemyNotShot()){
-            //     lives--;
-            // }
-            // else{
-            //     enemyDisappear();
-            //     ili boja enemy postaje siva
-            // }
-            lives--;
-            hit = 1;
+        else if ((lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o') && hit == 0 
+                && !sword && notKilled)
+        { 
+                lives--;
+                hit = 1;            
         }
+        else if(sword && (lvlMatrix[i+2][0] == 'o' || lvlMatrix[i+2][1] == 'o' || lvlMatrix[i+2][2] == 'o')){
+            notKilled = 0;
+            sword = 0;
+        }
+
         /* U slucaju nailaska na simbol heal, ako nemamo sve zivote, dobijamo
            jedan dodatan zivot. */
         else if (lvlMatrix[i][j] == 'x' && hit == 0){
@@ -112,12 +114,15 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
                 lives++;
             hit = 1;
         }
+
         else if(lvlMatrix[i][j] != '#' && lvlMatrix[i][j] != 'x'
-             && lvlMatrix[i][0] != 'o' && lvlMatrix[i][1] != 'o' && lvlMatrix[i][2] != 'o'){
+             && lvlMatrix[i][0] != 'o' && lvlMatrix[i][1] != 'o' && lvlMatrix[i][2] != 'o')
+        {
             hit = 0;
         }
-
-       // mac[k][j] lvlMatrix[i][2] i-3 <= K <=i 
+        else if(lvlMatrix[i][j] == '.' && !sword){ // TODO - da se ne gube zivoti/da ne ostanu svi sivi
+            notKilled = 1;
+        }
 
         /* Ako imamo 0 zivota, izgubili smo. */
         if (lives == 0)

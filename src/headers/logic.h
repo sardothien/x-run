@@ -20,6 +20,7 @@ int timer_active;
 float time_parameter;
 int lives;
 int sword;
+int notKilled;
 
 void initialize();
 

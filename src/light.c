@@ -45,7 +45,6 @@ void enemyLight(int part){
             break;
         }
         case 4: { // oci
-
             glColor3f(1, 0, 0);
             break;
         }
@@ -65,7 +64,7 @@ void elementsLight(int part){
             glColor3f(0.8, 0, 0);
             break;
         case 4: // osvetljenje/boja srca
-            glColor3f(0.6, 0, 0);
+            glColor3f(0.7, 0, 0);
             break;
     }
 }

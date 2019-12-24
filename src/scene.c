@@ -196,21 +196,33 @@ static void drawCylinder(GLfloat radius, GLfloat height){
 static void drawEnemy(){
     // Gornji deo glave
     glPushMatrix();
-        enemyLight(1);
+        if(notKilled)
+            enemyLight(1);
+        else
+            glColor3f(0.7, 0.7, 0.7);
+
      	glTranslatef(0, 0.69, 0);
      	glutSolidSphere(0.35, 30, 30);
     glPopMatrix();
     
     // Valjak
     glPushMatrix();
-        enemyLight(1);
+        if(notKilled)
+            enemyLight(1);
+        else
+            glColor3f(0.7, 0.7, 0.7);
+
         glRotatef(-90, 1, 0, 0);
         drawCylinder(0.35, 0.68);
     glPopMatrix();
 
     // Lice
     glPushMatrix();
-        enemyLight(2);
+        if(notKilled)
+            enemyLight(2);
+        else 
+            glColor3f(0.7, 0.7, 0.7);
+
         glTranslatef(0, 0.15, 0.15);
         glRotatef(-90, 1, 0, 0);
         drawCylinder(0.25, 0.45);
@@ -218,14 +230,22 @@ static void drawEnemy(){
 
     // Desno oko
     glPushMatrix();
-        enemyLight(4);
+        if(notKilled)
+            enemyLight(4);
+        else
+            glColor3f(0.2, 0.2, 0.2);
+    
      	glTranslatef(0.10, 0.5, 0.35);
      	glutSolidSphere(0.06, 30, 30);
     glPopMatrix();
 
     // Levo oko
     glPushMatrix();
-        enemyLight(4);
+        if(notKilled)
+            enemyLight(4);
+        else
+            glColor3f(0.2, 0.2, 0.2);
+        
      	glTranslatef(-0.10, 0.5, 0.35);
      	glutSolidSphere(0.06, 30, 30);
     glPopMatrix();
@@ -234,21 +254,33 @@ static void drawEnemy(){
 
     // Desna obrva
     glBegin(GL_LINE_STRIP);
-        enemyLight(3);
+        if(notKilled)   
+            enemyLight(3);
+        else
+            glColor3f(0.2, 0.2, 0.2);
+
         glVertex3f(0.06, 0.55, 0.4);
         glVertex3f(0.22, 0.6, 0.4);
     glEnd();
 
     // Leva obrva
     glBegin(GL_LINE_STRIP);
-        enemyLight(3);
+        if(notKilled)   
+            enemyLight(3);
+        else
+            glColor3f(0.2, 0.2, 0.2);
+
         glVertex3f(-0.06, 0.55, 0.4);
         glVertex3f(-0.22, 0.6, 0.4);
     glEnd();
 
     // Usta    
     glBegin(GL_LINE_STRIP);
-        enemyLight(3);
+        if(notKilled)   
+            enemyLight(3);
+        else
+            glColor3f(0.2, 0.2, 0.2);
+
         glVertex3f(0.15, 0.2, 0.4);
         glVertex3f(0.15, 0.3, 0.4);
         glVertex3f(0.10, 0.35, 0.4);
@@ -281,11 +313,13 @@ static void drawObstacle(char type){
             break;
 
         case 'o': // enemy
-            glPushMatrix();
-                glTranslatef(0, sin(time_parameter / 2.0f) * 0.5f, 0);
-                glScalef(0.7, 4, 0.7);
-                drawEnemy();
-            glPopMatrix();
+            //if(notKilled){
+                glPushMatrix();
+                    glTranslatef(0, sin(time_parameter / 2.0f) * 0.5f, 0);
+                    glScalef(0.7, 4, 0.7);
+                    drawEnemy();
+                glPopMatrix();
+            //}            
             break;
     }
 }
@@ -318,7 +352,7 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
 /* Funkcija za iscrtavanje pojedinacnog srca */
 static void drawHeart(){
 
-    glScalef(0.15, 0.15, 0.15);
+    glScalef(0.18, 0.18, 0.18);
     glPushMatrix();
         glutSolidSphere(0.2, 30, 30);
 
@@ -326,7 +360,7 @@ static void drawHeart(){
         glutSolidSphere(0.2, 30, 30);
 
         glScalef(1.4, 1.4, 0.2);
-        glTranslatef(-0.15, -0.15, 0);
+        glTranslatef(-0.18, -0.165, 0);
         glRotatef(50, 0, 0, 1);
         glRotatef(-5, 0, 0, 1);
         glutSolidCube(0.30);
@@ -345,7 +379,7 @@ void drawHearts(){
     int i = 1;
     while(health){
         glPushMatrix();
-            glTranslatef(-1.6 + (health-i)*0.1 + x, 2.0, 0);
+            glTranslatef(-0.1 + (health-i)*0.1 + x, 1.8, 0);
             glRotatef(25, 0, 1, 0);
             glRotatef(-25, 1, 0, 0);
             drawHeart();
@@ -357,10 +391,48 @@ void drawHearts(){
     glEnable(GL_LIGHTING);
 }
 
-void drawSword(){
+/* Funkcija za crtanje i popzicioniranje objekta sword */
+void drawSword(){    
+    
     glPushMatrix();
-        glColor3f(0, 0, 1);
-        glTranslatef(x, 0.2, -z+time_parameter/5.0f);
-        glutSolidSphere(0.08, 20, 20);
+
+        glDisable(GL_LIGHTING);
+
+        glTranslatef(x, 0.2, -z+time_parameter/5.0f);    
+        glRotatef(20, 0, 0, 1);
+        glRotatef(-60, 0, 1, 0);    
+        glScalef(1.1, 1.8, 1);
+
+        glPushMatrix(); // braon deo
+            glColor3f(0.6, 0.1, 0.1);
+            glScalef(0.1, 0.3, 1.2);
+            glutSolidCube(0.2);
+        glPopMatrix();
+    
+    
+        glPushMatrix(); // drska
+            glColor3f(0.4, 0.1, 0.1);
+            glTranslatef(0, -0.08, 0);
+            glScalef(0.1, 0.5, 0.3);            
+            glutSolidCube(0.2);
+        glPopMatrix();
+
+        glPushMatrix(); // ostrica
+            glColor3f(0.8, 0.8, 0.8);
+            glTranslatef(0, 0.17, 0);
+            glScalef(0.1, 1.4, 0.3);
+            glutSolidCube(0.2);
+        glPopMatrix();
+
+        glPushMatrix(); // vrh
+            glColor3f(0.8, 0.8, 0.8);
+            glTranslatef(0, 0.31, 0);
+            glScalef(0.1, 0.2, 0.2);
+            glRotatef(-90, 1, 0, 0);
+            glutSolidCone(0.19, 0.3, 30, 30);
+        glPopMatrix();
+
+        glEnable(GL_LIGHTING);
+
     glPopMatrix();
 }

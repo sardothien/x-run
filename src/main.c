@@ -33,7 +33,7 @@ int main(int argc, char ** argv){
     glutInitWindowPosition(100, 100);
     glutCreateWindow("x-run");
 
-    //glutFullScreen();
+    glutFullScreen();
 
     glutDisplayFunc(on_display);
     glutReshapeFunc(on_reshape);
@@ -103,7 +103,8 @@ static void on_keyboard(unsigned char key, int x, int y){
             glutPostRedisplay();
             break;
         case 32:
-            // gadjanje
+            // ubijanje neprijatelja
+            printf("killed\n");
             if(timer_active){
                 sword = 1;
             }
