@@ -10,6 +10,8 @@
 
 const static float PI = 3.141592653589793;
 
+GLUquadric* qobj;
+
 extern Level lvl;
 
 /* Funkcija za iscrtavanje koordinatnog sistema */
@@ -171,27 +173,6 @@ static void drawHeal(){
     glPopMatrix();
 }
 
-/* Pomocna funkcija za crtanje valjka */
-static void drawCylinder(GLfloat radius, GLfloat height){
-    GLfloat x = 0.0;
-    GLfloat y = 0.0;
-    GLfloat angle = 0.0;
-    GLfloat step = 0.1;
-
-    glBegin(GL_QUAD_STRIP);
-        angle = 0.0;
-        while(angle < 2*PI) {
-            x = radius * cos(angle);
-            y = radius * sin(angle);
-            glVertex3f(x, y, height);
-            glVertex3f(x, y, 0.0);
-            angle += step;
-        }
-        glVertex3f(radius, 0.0, height);
-        glVertex3f(radius, 0.0, 0.0);
-    glEnd();
-}
-
 /* Funkcija za iscrtavanje objekta enemy */
 static void drawEnemy(){
     // Gornji deo glave
@@ -205,7 +186,9 @@ static void drawEnemy(){
      	glutSolidSphere(0.35, 30, 30);
     glPopMatrix();
     
-    // Valjak
+    qobj = gluNewQuadric();
+
+    // Glava
     glPushMatrix();
         if(notKilled)
             enemyLight(1);
@@ -213,7 +196,7 @@ static void drawEnemy(){
             glColor3f(0.7, 0.7, 0.7);
 
         glRotatef(-90, 1, 0, 0);
-        drawCylinder(0.35, 0.68);
+        gluCylinder(qobj, 0.35, 0.35, 0.68, 30, 30);
     glPopMatrix();
 
     // Lice
@@ -225,7 +208,7 @@ static void drawEnemy(){
 
         glTranslatef(0, 0.15, 0.15);
         glRotatef(-90, 1, 0, 0);
-        drawCylinder(0.25, 0.45);
+        gluCylinder(qobj, 0.25, 0.25, 0.45, 30, 30);
     glPopMatrix();
 
     // Desno oko
