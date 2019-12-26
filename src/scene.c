@@ -2,17 +2,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 #include "./headers/logic.h"
 #include "./headers/scene.h"
 #include "./headers/image.h"
 #include "./headers/light.h"
 
-const static float PI = 3.141592653589793;
+// #define MAX_LENGTH_STRING (50)
 
 GLUquadric* qobj;
-
 extern Level lvl;
+
+const static float PI = 3.141592653589793;
+// static char word[MAX_LENGTH_STRING];
 
 /* Funkcija za iscrtavanje koordinatnog sistema */
 void drawSystem(){
@@ -419,4 +422,24 @@ void drawSword(){
         glEnable(GL_LIGHTING);
 
     glPopMatrix();
+}
+
+/* Funkcija za iscrtavanje Game Over ekrana */
+void gameOver(){
+
+    // TODO - veca slova
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(0, 0, 1, 
+              0, 0, 0, 
+              0, 1, 0);
+
+    glColor3f(1, 0, 0);
+    glRasterPos3f(-0.2, 0.1, -4.0);
+    char word[50] = "GAME OVER";
+    int wordLen = (int)strlen(word);
+    for(int i = 0; i < wordLen; i++){
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, word[i]);
+    }
 }

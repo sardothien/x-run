@@ -61,50 +61,42 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 'q':
         case 'Q':
             // izlaz iz igre
-            //deallocLevel(lvl.levelMatrix, lvl.rowNumber);
-            printf("Izašli ste iz igre.\n");
+            // deallocLevel(lvl.levelMatrix, lvl.rowNumber);
             exit(0);
             break;
         case 's':
         case 'S':
             // pocetak/nastavak igre
-            if(!timer_active && z < lvl.rowNumber){
+            if(!timer_active && z < lvl.rowNumber && lives != 0){
                 glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
                 timer_active = 1;
             }
-            printf("start\n");
             break;
         case 'p':
         case 'P':
             // pauziranje
             timer_active = 0;
-            printf("pause\n");
             break;
         case 'r':
         case 'R': 
             // restart
-            // TODO - nestaje metak
             initialize();
             glutPostRedisplay();
-            printf("restart\n");
             break;
         case 'a':
         case 'A':
             // skretanje levo
-            printf("left\n");
             moves[1] = 1;
             glutPostRedisplay();
             break;
         case 'd':
         case 'D':
             // skretanje desno
-            printf("right\n");
             moves[0] = 1;
             glutPostRedisplay();
             break;
         case 32:
             // ubijanje neprijatelja
-            printf("killed\n");
             if(timer_active){
                 sword = 1;
             }
@@ -142,11 +134,11 @@ static void on_timer(int value){
         return;
     
     if(moves[0] && x <= 2.5){ // skrece desno
-        x += 1.1;
+        x += 0.5;
     }
     
     if(moves[1] && x >= -2.5){ // skrece levo
-        x -= 1.1;
+        x -= 0.5;
     }
 
     if(x >= -3 && x <= -1.5)
@@ -160,6 +152,7 @@ static void on_timer(int value){
 
     if(z > lvl.rowNumber){
         timer_active = 0;
+        // win();
         printf("Presli ste igricu!!!");
     }
     
@@ -195,9 +188,7 @@ static void on_display(void){
 
     if(hasCollision(lvl.levelMatrix, lvl.rowNumber)){
         timer_active = 0;
-        printf("Izgubili ste. Pritisnite R za restart.\n");
-        // dodati obradu da S vise ne radi
-        // dodati ekran na kom pise Game Over ili slicno
+        gameOver();
     }
         
     glutSwapBuffers();

@@ -97,7 +97,7 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
         /* Prilikom prolaska pored objekta enemy, u slucaju da ga nismo pogodili,
            gubimo jedan zivot. Inace, on menja boju u sivu. */
         else if ((lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o') && hit == 0 
-                && !sword && notKilled)
+                && notKilled)
         { 
                 lives--;
                 hit = 1;            

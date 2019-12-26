@@ -10,5 +10,7 @@ void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int o
 void drawHearts();
 
 void drawSword();
+
+void gameOver();
      
 #endif
