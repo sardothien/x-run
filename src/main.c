@@ -33,7 +33,7 @@ int main(int argc, char ** argv){
     glutInitWindowPosition(100, 100);
     glutCreateWindow("x-run");
 
-    glutFullScreen();
+    // glutFullScreen();
 
     glutDisplayFunc(on_display);
     glutReshapeFunc(on_reshape);
@@ -61,7 +61,7 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 'q':
         case 'Q':
             // izlaz iz igre
-            deallocLevel(lvl.levelMatrix, lvl.rowNumber);
+            //deallocLevel(lvl.levelMatrix, lvl.rowNumber);
             printf("Izašli ste iz igre.\n");
             exit(0);
             break;

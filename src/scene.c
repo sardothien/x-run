@@ -175,6 +175,7 @@ static void drawHeal(){
 
 /* Funkcija za iscrtavanje objekta enemy */
 static void drawEnemy(){
+
     // Gornji deo glave
     glPushMatrix();
         if(notKilled)
