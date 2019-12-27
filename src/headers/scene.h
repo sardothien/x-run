@@ -12,5 +12,7 @@ void drawHearts();
 void drawSword();
 
 void gameOver();
+void gamePaused();
+void gameWon();
      
 #endif

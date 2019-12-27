@@ -378,7 +378,7 @@ void drawHearts(){
     glEnable(GL_LIGHTING);
 }
 
-/* Funkcija za crtanje i popzicioniranje objekta sword */
+/* Funkcija za crtanje i pozicioniranje objekta sword */
 void drawSword(){    
     
     glPushMatrix();
@@ -424,22 +424,58 @@ void drawSword(){
     glPopMatrix();
 }
 
-/* Funkcija za iscrtavanje Game Over ekrana */
+/* Ispisivanje teksta prilikom gubitka */
 void gameOver(){
 
-    // TODO - veca slova
+    glPushMatrix();
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(0, 0, 1, 
-              0, 0, 0, 
-              0, 1, 0);
-
-    glColor3f(1, 0, 0);
-    glRasterPos3f(-0.2, 0.1, -4.0);
+    glColor3f(0, 0, 0);
+    glRasterPos3f(-0.6+x, 0.1, -4.0);
     char word[50] = "GAME OVER";
     int wordLen = (int)strlen(word);
     for(int i = 0; i < wordLen; i++){
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, word[i]);
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word[i]);
     }
+
+    glPopMatrix();
+}
+
+/* Ispis teksta prilikom pauziranja igrice */
+void gamePaused(){
+
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+
+    glColor3f(0, 1, 0);
+
+    glRasterPos3f(-0.27+x, 1.5, 0);
+    char word1[50] = "GAME PAUSED\n";
+    int wordLen = (int)strlen(word1);
+    for(int i = 0; i < wordLen; i++){
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, word1[i]);
+    }
+    
+    glRasterPos3f(-0.37+x, 1.4, 0);
+    char word2[50] = "- press S to continue -";
+    wordLen = (int)strlen(word2);
+    for(int i = 0; i < wordLen; i++){
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, word2[i]);
+    }
+
+    glEnable(GL_LIGHTING);
+    glPopMatrix();
+}
+
+void gameWon(){
+    glPushMatrix();
+
+    glColor3f(0, 0, 1);
+    glRasterPos3f(-0.6+x, 0.1, -4.0);
+    char word[50] = "GAME WON!";
+    int wordLen = (int)strlen(word);
+    for(int i = 0; i < wordLen; i++){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word[i]);
+    }
+
+    glPopMatrix();
 }

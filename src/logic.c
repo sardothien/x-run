@@ -14,6 +14,7 @@ extern Level lvl;
 
 /* Inicijalizacija globalnih promenljivih */
 void initialize(){
+
     time_parameter = 0;
     timer_active = 0;
 
@@ -26,6 +27,9 @@ void initialize(){
 
     lives = 3;
     hit = 0;
+
+    paused = 0;
+    won = 0;
 
     sword = 0;
     notKilled = 1;

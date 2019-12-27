@@ -21,6 +21,9 @@ float time_parameter;
 int lives;
 int sword;
 int notKilled;
+int paused;
+int windowWidth, windowHeight;
+int won;
 
 void initialize();
 

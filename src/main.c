@@ -33,7 +33,7 @@ int main(int argc, char ** argv){
     glutInitWindowPosition(100, 100);
     glutCreateWindow("x-run");
 
-    // glutFullScreen();
+    glutFullScreen();
 
     glutDisplayFunc(on_display);
     glutReshapeFunc(on_reshape);
@@ -76,6 +76,7 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 'P':
             // pauziranje
             timer_active = 0;
+            paused = 1;
             break;
         case 'r':
         case 'R': 
@@ -126,6 +127,9 @@ static void on_reshape(int width, int height){
     gluPerspective(60,
                    (float) width/height,
                    1, 1500);
+
+    windowWidth = width;
+    windowHeight = height;
 }
 
 static void on_timer(int value){
@@ -150,10 +154,9 @@ static void on_timer(int value){
     
     z += 0.2;
 
-    if(z > lvl.rowNumber){
+    if((int)z == lvl.rowNumber-7){
         timer_active = 0;
-        // win();
-        printf("Presli ste igricu!!!");
+        won = 1;
     }
     
     time_parameter++;
@@ -186,9 +189,18 @@ static void on_display(void){
         drawSword();
     }
 
+    if(!timer_active && paused){
+        gamePaused();
+        paused = 0;
+    }
+
     if(hasCollision(lvl.levelMatrix, lvl.rowNumber)){
         timer_active = 0;
         gameOver();
+    }
+
+    if(won){
+        gameWon();
     }
         
     glutSwapBuffers();
