@@ -24,7 +24,6 @@ void initializeLight(){
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
-    // glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 0);
     glEnable(GL_COLOR_MATERIAL);
 }
 
@@ -57,14 +56,14 @@ void elementsLight(int part){
         case 1: // osvetljenje/boja poda
             glColor3f(0.7, 0.5, 0.5);
             break;
-        case 2: // osvetljenje/boja kvadra
+        case 2: // osvetljenje/boja prepreke
             glColor3f(0, 0.7, 0.2);
             break;
         case 3: // osvetljenje/boja objekta heal
             glColor3f(0.8, 0, 0);
             break;
         case 4: // osvetljenje/boja srca
-            glColor3f(0.7, 0, 0);
+            glColor3f(0.8, 0.2, 0);
             break;
     }
 }

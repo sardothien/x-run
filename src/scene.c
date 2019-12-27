@@ -9,13 +9,11 @@
 #include "./headers/image.h"
 #include "./headers/light.h"
 
-// #define MAX_LENGTH_STRING (50)
+#define MAX_WORD_LENGTH (40)
 
 GLUquadric* qobj;
 extern Level lvl;
-
 const static float PI = 3.141592653589793;
-// static char word[MAX_LENGTH_STRING];
 
 /* Funkcija za iscrtavanje koordinatnog sistema */
 void drawSystem(){
@@ -121,8 +119,8 @@ static void drawCube(){
     glPopMatrix();
 }
 
-/* Funkcija za iscrtavanje neba */
-void drawSky(unsigned textureID){
+/* Funkcija za iscrtavanje pozadine */
+void drawBackground(unsigned textureID){
     glPushMatrix();
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureID);
@@ -137,7 +135,6 @@ void drawSky(unsigned textureID){
 /* Funkcija za crtanje staze */
 void drawFloor(double width){
     
-    // osvetljenje/boja
     elementsLight(1);
     
     glPushMatrix();
@@ -300,13 +297,11 @@ static void drawObstacle(char type){
             break;
 
         case 'o': // enemy
-            //if(notKilled){
-                glPushMatrix();
-                    glTranslatef(0, sin(time_parameter / 2.0f) * 0.5f, 0);
-                    glScalef(0.7, 4, 0.7);
-                    drawEnemy();
-                glPopMatrix();
-            //}            
+            glPushMatrix();
+                glTranslatef(0, sin(time_parameter / 2.0f) * 0.5f, 0);
+                glScalef(0.7, 4, 0.7);
+                drawEnemy();
+            glPopMatrix();           
             break;
     }
 }
@@ -354,8 +349,7 @@ static void drawHeart(){
 	glPopMatrix();
 }
 
-/* Funkcija za pozicioniranje i iscrtavanje srca 
-   u gornjem levom uglu ekrana */
+/* Funkcija za pozicioniranje i iscrtavanje srca */
 void drawHearts(){
 
     glDisable(GL_LIGHTING);
@@ -383,19 +377,21 @@ void drawSword(){
     
     glPushMatrix();
 
-        glDisable(GL_LIGHTING);
-
-        glTranslatef(x, 0.2, -z+time_parameter/5.0f);    
+        // Transformacije
+        glTranslatef(x, 0.2, -z + time_parameter/5.0f);    
         glRotatef(20, 0, 0, 1);
         glRotatef(-60, 0, 1, 0);    
         glScalef(1.1, 1.8, 1);
 
-        glPushMatrix(); // braon deo
+        glDisable(GL_LIGHTING);
+
+        glPushMatrix(); // nakrsnica
             glColor3f(0.6, 0.1, 0.1);
             glScalef(0.1, 0.3, 1.2);
             glutSolidCube(0.2);
-        glPopMatrix();
-    
+        glPopMatrix();   
+
+        glEnable(GL_LIGHTING); 
     
         glPushMatrix(); // drska
             glColor3f(0.4, 0.1, 0.1);
@@ -403,7 +399,7 @@ void drawSword(){
             glScalef(0.1, 0.5, 0.3);            
             glutSolidCube(0.2);
         glPopMatrix();
-
+        
         glPushMatrix(); // ostrica
             glColor3f(0.8, 0.8, 0.8);
             glTranslatef(0, 0.17, 0);
@@ -411,7 +407,7 @@ void drawSword(){
             glutSolidCube(0.2);
         glPopMatrix();
 
-        glPushMatrix(); // vrh
+        glPushMatrix(); // vrh ostrice
             glColor3f(0.8, 0.8, 0.8);
             glTranslatef(0, 0.31, 0);
             glScalef(0.1, 0.2, 0.2);
@@ -419,7 +415,7 @@ void drawSword(){
             glutSolidCone(0.19, 0.3, 30, 30);
         glPopMatrix();
 
-        glEnable(GL_LIGHTING);
+        
 
     glPopMatrix();
 }
@@ -428,15 +424,17 @@ void drawSword(){
 void gameOver(){
 
     glPushMatrix();
+    glDisable(GL_LIGHTING);
 
-    glColor3f(0, 0, 0);
-    glRasterPos3f(-0.6+x, 0.1, -4.0);
-    char word[50] = "GAME OVER";
+    glColor3f(1, 0, 0);
+    glRasterPos3f(-0.6+x, 1.4, -4.0);
+    char word[MAX_WORD_LENGTH] = "GAME OVER";
     int wordLen = (int)strlen(word);
     for(int i = 0; i < wordLen; i++){
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word[i]);
     }
 
+    glEnable(GL_LIGHTING);
     glPopMatrix();
 }
 
@@ -449,14 +447,14 @@ void gamePaused(){
     glColor3f(0, 1, 0);
 
     glRasterPos3f(-0.27+x, 1.5, 0);
-    char word1[50] = "GAME PAUSED\n";
+    char word1[MAX_WORD_LENGTH] = "GAME PAUSED\n";
     int wordLen = (int)strlen(word1);
     for(int i = 0; i < wordLen; i++){
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, word1[i]);
     }
     
     glRasterPos3f(-0.37+x, 1.4, 0);
-    char word2[50] = "- press S to continue -";
+    char word2[MAX_WORD_LENGTH] = "- press S to continue -";
     wordLen = (int)strlen(word2);
     for(int i = 0; i < wordLen; i++){
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, word2[i]);
@@ -466,12 +464,13 @@ void gamePaused(){
     glPopMatrix();
 }
 
+/* Ispis teksta prilikom pobede */
 void gameWon(){
     glPushMatrix();
 
     glColor3f(0, 0, 1);
     glRasterPos3f(-0.6+x, 0.1, -4.0);
-    char word[50] = "GAME WON!";
+    char word[MAX_WORD_LENGTH] = "GAME WON!";
     int wordLen = (int)strlen(word);
     for(int i = 0; i < wordLen; i++){
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, word[i]);

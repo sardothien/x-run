@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 
+/* Pomocna struktura za ucitavanje nivoa */
 typedef struct {
     char **levelMatrix;
     int rowNumber;
@@ -11,25 +12,34 @@ typedef struct {
     unsigned backgroundID;
 } Level;
 
-int moves[2];
-
-double x, z;
-int x_pom;
-int hit;
 int timer_active;
 float time_parameter;
+
+/* Pamti se pozicija na kojoj se nalazimo */
+int moves[2];
+double x, z;
+int x_pom;
+
+/* Pomocna promenljiva za koliziju */
+int hit;
+
+/* Broj preostalih zivota */
 int lives;
+
+/* Pomocne promenljive za akciju ubijanja neprijatelja */
 int sword;
 int notKilled;
-int paused;
-int windowWidth, windowHeight;
-int won;
 
+/* Pomocne promenljive koje detektuju pauzu/kraj igre */
+int paused, won;
+
+/* Inicijalizacija igre */
 void initialize();
 
+/* Funkcija za ucitavanje nivoa iz datoteke */
 char** loadLevel(char *path, int *rowNumber, int *obstacleNumberInRow);
-void deallocLevel(char **levelMatrix, int rowNumber);
 
+/* Funkcija za obradu kolizija */
 bool hasCollision(char** lvlMatrix, int rowNumber);
      
 #endif

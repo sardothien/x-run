@@ -47,9 +47,12 @@ char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
 
     char buffer[MAX];
 
+    /* U prvom redu datoteke se nalazi broj redova i 
+       broj prepreka u jednom redu */
     fscanf(in, "%d\n", rowNumber);
     fscanf(in, "%d\n", obstacleNumberInRow);
 
+    /* Alociramo memoriju za nivo */
     char **levelMatrix = NULL;
     levelMatrix = (char**) malloc(sizeof(char*) * (*rowNumber));
     if(levelMatrix == NULL){
@@ -57,13 +60,13 @@ char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
         exit(EXIT_FAILURE);
     }
 
+    /* Ucitavamo nivo u matricu */
     int i = 0;
     while(fgets(buffer, 100, in) != NULL){
 
         levelMatrix[i] = NULL;
         levelMatrix[i] = (char*) malloc(sizeof(char) * (*obstacleNumberInRow));
         if(levelMatrix[i] == NULL){
-            deallocLevel(levelMatrix, i);
             fprintf(stderr, "Error! Unsuccessful 2nd malloc.");
             exit(EXIT_FAILURE);
         }
@@ -76,13 +79,6 @@ char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
     }
 
     return levelMatrix;
-}
-
-/* Brisanje nivoa i oslobadjanje memorije */
-void deallocLevel(char **levelMatrix, int rowNumber){
-    for (int i = 0; i < rowNumber; i++)
-        free(levelMatrix[i]);
-    free(levelMatrix);
 }
 
 /* Funkcija za obradu kolizija */
@@ -101,8 +97,7 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
         /* Prilikom prolaska pored objekta enemy, u slucaju da ga nismo pogodili,
            gubimo jedan zivot. Inace, on menja boju u sivu. */
         else if ((lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o') && hit == 0 
-                && notKilled)
-        { 
+                && notKilled){ 
                 lives--;
                 hit = 1;            
         }
@@ -112,7 +107,7 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
         }
 
         /* U slucaju nailaska na simbol heal, ako nemamo sve zivote, dobijamo
-           jedan dodatan zivot. */
+           jedan zivot. */
         else if (lvlMatrix[i][j] == 'x' && hit == 0){
             if (lives < 3)
                 lives++;
