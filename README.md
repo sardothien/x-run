@@ -1,4 +1,4 @@
-x-run
+# x-run
 
 ### :pencil: Opis igre:
 * Poenta igrice je preći sve prepreke i doći do cilja. <br>
