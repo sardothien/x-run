@@ -160,7 +160,7 @@ static void on_timer(int value){
     z += 0.2;
 
     /* kraj igrice */
-    if((int)z == lvl.rowNumber-7){
+    if((int)z == lvl.rowNumber-9){
         timer_active = 0;
         won = 1;
     }
@@ -191,8 +191,6 @@ static void on_display(void){
 
     /* Iscrtavanje staze */
     drawFloor(2);
-
-    printf("%.1f\n", z);
 
     /* Postavljanje prepreka na stazu */
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);

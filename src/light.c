@@ -57,7 +57,7 @@ void elementsLight(int part){
             glColor3f(0.7, 0.5, 0.5);
             break;
         case 2: // osvetljenje/boja prepreke
-            glColor3f(0, 0.7, 0.2);
+            glColor3f(0, 0.6, 0.2);
             break;
         case 3: // osvetljenje/boja objekta heal
             glColor3f(0.8, 0, 0);
