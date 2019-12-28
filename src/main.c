@@ -8,9 +8,9 @@
 #include "./headers/light.h"
 
 #define TIMER_ID 0
-#define TIMER_INTERVAL 50
+#define TIMER_INTERVAL 40
 
-/* Callback funkcije */
+/* callback funkcije */
 static void on_display(void);
 static void on_timer(int value);
 static void on_reshape(int width, int height);
@@ -83,7 +83,7 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 's':
         case 'S':
             // pocetak/nastavak igre
-            if(!timer_active && z < lvl.rowNumber && lives != 0){
+            if(!timer_active && z < lvl.rowNumber && lives != 0 && !won){
                 glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
                 timer_active = 1;
             }
@@ -112,7 +112,7 @@ static void on_keyboard(unsigned char key, int x, int y){
             moves[0] = 1;
             glutPostRedisplay();
             break;
-        case 32:
+        case 32: // space
             // pokretanje maca
             if(timer_active){
                 sword = 1;
@@ -149,13 +149,13 @@ static void on_timer(int value){
         x -= 0.5;
     }
 
-    /* Polozaj na stazi - levo, sredina ili desno */
+    /* Polozaj na stazi */
     if(x >= -3 && x <= -1.5)
-        x_pom = 0;
+        x_pom = 0; // levo
     else if(x > -1.5 && x < 1.5)
-        x_pom = 1;
+        x_pom = 1; // sredina
     else if(x >= 1.5 && x <= 3)
-        x_pom = 2;
+        x_pom = 2; // desno
     
     z += 0.2;
 
@@ -193,7 +193,7 @@ static void on_display(void){
     drawFloor(2);
 
     /* Postavljanje prepreka na stazu */
-    drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
+    drawObstacles(lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
 
     /* Postavljanje zivota */
     drawHearts();

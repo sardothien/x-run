@@ -13,6 +13,7 @@ void elementsLight(int part);
 /* Inicijalizacija tekstura */
 void initializeTextures();
 
+/* Postavljanje pozadine */
 unsigned backgroundTexture(Image* img);
      
 #endif

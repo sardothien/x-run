@@ -27,7 +27,7 @@ void initializeLight(){
     glEnable(GL_COLOR_MATERIAL);
 }
 
-/* Osvetljenje kod objekta enemy */
+/* Osvetljenje kod objekta enemy ukoliko nije ubijen */
 void enemyLight(int part){
 
     switch(part){
@@ -57,7 +57,7 @@ void elementsLight(int part){
             glColor3f(0.7, 0.5, 0.5);
             break;
         case 2: // osvetljenje/boja prepreke
-            glColor3f(0, 0.6, 0.2);
+            glColor3f(0.4, 0.4, 0.6);
             break;
         case 3: // osvetljenje/boja objekta heal
             glColor3f(0.8, 0, 0);

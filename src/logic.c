@@ -10,8 +10,6 @@
 
 #define MAX (1700)
 
-extern Level lvl;
-
 /* Inicijalizacija globalnih promenljivih */
 void initialize(){
 
@@ -26,18 +24,19 @@ void initialize(){
     z = 1;
 
     lives = 3;
+    
     hit = 0;
+    sword = 0;
+    killed = 0;
 
     paused = 0;
     won = 0;
-
-    sword = 0;
-    killed = 0;
 }
 
 /* Funkcija za ucitavanje nivoa iz datoteke */
 char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
 
+    /* Otvaranje datoteke u kojoj se nalazi nivo */
     FILE *in;
     in = fopen(path, "r");
     if(in == NULL){
@@ -84,8 +83,8 @@ char** loadLevel(char * path, int *rowNumber, int *obstacleNumberInRow){
 /* Funkcija za obradu kolizija */
 bool hasCollision(char** lvlMatrix, int rowNumber){
         
-    int i = (int)z;
-    int j = x_pom; 
+    int i = (int)z; // red u kome se nalazimo
+    int j = x_pom;  // kolona u kojoj se nalazimo
        
     if (i < rowNumber){
         /* Prilikom sudara sa kockom gubi se jedan zivot. */
@@ -95,9 +94,9 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
         }
 
         /* Prilikom prolaska pored objekta enemy, u slucaju da ga nismo pogodili,
-           gubimo jedan zivot. Inace, on menja boju u sivu. */
-        else if ((lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o') && hit == 0 
-                && !killed)
+           gubimo jedan zivot. Inace, on menja boju u sivu, sto znaci da je ubijen. */
+        else if ((lvlMatrix[i][0] == 'o' || lvlMatrix[i][1] == 'o' || lvlMatrix[i][2] == 'o') 
+                && hit == 0 && !killed)
         { 
                 lives--;
                 hit = 1;    
@@ -109,10 +108,12 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
                 killed = 0;
                 hit = 1;        
         }
+        /* Nakon sto smo ubili neprijatelja ili smo samo prosli pored njega, mac se uvlaci */
         else if(sword && lvlMatrix[i+2][j] == 'o'){ 
             killed = 1;
             sword = 0;
         }
+        /* Ako naidjemo na ostale prepreke, mac se takodje uvlaci */
         else if(sword && (lvlMatrix[i+2][j] == '#' || lvlMatrix[i+2][j] == 'x')){ 
             sword = 0;
         }        
@@ -124,7 +125,8 @@ bool hasCollision(char** lvlMatrix, int rowNumber){
                 lives++;
             hit = 1;
         }
-
+        
+        /* Ako nismo naisli ni na jednu prepreku, nije doslo do sudara */
         else if(lvlMatrix[i][j] != '#' && lvlMatrix[i][j] != 'x'
              && lvlMatrix[i][0] != 'o' && lvlMatrix[i][1] != 'o' && lvlMatrix[i][2] != 'o')
         {

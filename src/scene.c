@@ -12,8 +12,6 @@
 #define MAX_WORD_LENGTH (40)
 
 GLUquadric* qobj;
-extern Level lvl;
-const static float PI = 3.141592653589793;
 
 /* Funkcija za iscrtavanje koordinatnog sistema */
 void drawSystem(){
@@ -135,6 +133,7 @@ void drawBackground(unsigned textureID){
 /* Funkcija za crtanje staze */
 void drawFloor(double width){
     
+    // postavljanje boje staze
     elementsLight(1);
     
     glPushMatrix();
@@ -175,6 +174,9 @@ static void drawHeal(){
 
 /* Funkcija za iscrtavanje objekta enemy */
 static void drawEnemy(){
+    
+    /* Ako je neprijatelj ubijen bice obojen sivom bojom.
+       Inace, je obojen crveno-zuto. */
 
     // Gornji deo glave
     glPushMatrix();
@@ -182,7 +184,6 @@ static void drawEnemy(){
             enemyLight(1);
         else
             glColor3f(0.7, 0.7, 0.7);
-
      	glTranslatef(0, 0.69, 0);
      	glutSolidSphere(0.35, 30, 30);
     glPopMatrix();
@@ -195,7 +196,6 @@ static void drawEnemy(){
             enemyLight(1);
         else
             glColor3f(0.7, 0.7, 0.7);
-
         glRotatef(-90, 1, 0, 0);
         gluCylinder(qobj, 0.35, 0.35, 0.68, 30, 30);
     glPopMatrix();
@@ -206,7 +206,6 @@ static void drawEnemy(){
             enemyLight(2);
         else 
             glColor3f(0.7, 0.7, 0.7);
-
         glTranslatef(0, 0.15, 0.15);
         glRotatef(-90, 1, 0, 0);
         gluCylinder(qobj, 0.25, 0.25, 0.45, 30, 30);
@@ -217,8 +216,7 @@ static void drawEnemy(){
         if(!killed)
             enemyLight(4);
         else
-            glColor3f(0.2, 0.2, 0.2);
-    
+            glColor3f(0.2, 0.2, 0.2);    
      	glTranslatef(0.10, 0.5, 0.35);
      	glutSolidSphere(0.06, 30, 30);
     glPopMatrix();
@@ -228,8 +226,7 @@ static void drawEnemy(){
         if(!killed)
             enemyLight(4);
         else
-            glColor3f(0.2, 0.2, 0.2);
-        
+            glColor3f(0.2, 0.2, 0.2);        
      	glTranslatef(-0.10, 0.5, 0.35);
      	glutSolidSphere(0.06, 30, 30);
     glPopMatrix();
@@ -242,7 +239,6 @@ static void drawEnemy(){
             enemyLight(3);
         else
             glColor3f(0.2, 0.2, 0.2);
-
         glVertex3f(0.06, 0.55, 0.4);
         glVertex3f(0.22, 0.6, 0.4);
     glEnd();
@@ -253,7 +249,6 @@ static void drawEnemy(){
             enemyLight(3);
         else
             glColor3f(0.2, 0.2, 0.2);
-
         glVertex3f(-0.06, 0.55, 0.4);
         glVertex3f(-0.22, 0.6, 0.4);
     glEnd();
@@ -264,7 +259,6 @@ static void drawEnemy(){
             enemyLight(3);
         else
             glColor3f(0.2, 0.2, 0.2);
-
         glVertex3f(0.15, 0.2, 0.4);
         glVertex3f(0.15, 0.3, 0.4);
         glVertex3f(0.10, 0.35, 0.4);
@@ -280,6 +274,7 @@ static void drawObstacle(char type){
     switch (type){
         case '#': // cube
             glPushMatrix();
+                // boja prepreke
                 elementsLight(2);
                 glScalef(1.0, 3.3, 1.0);
                 glTranslatef(0, 0.01, 0);
@@ -289,6 +284,7 @@ static void drawObstacle(char type){
         
         case 'x': // heal
             glPushMatrix();
+                // boja heal-a
                 elementsLight(3);
                 glScalef(0.5, 3, 0);
                 glRotatef(time_parameter*5.0f, 0, 1, 0);
@@ -307,19 +303,19 @@ static void drawObstacle(char type){
 }
 
 /* Funkcija za smestanje objekata na odgovarajuce mesto i njihovo iscrtavanje */
-void drawObstacles(double spinningPath, char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth){
+void drawObstacles(char** levelMatrix, int rowNumber, int obstacleNumberInRow, int maxRows, double pathWidth){
 
     glPushMatrix();
         glTranslatef(0, -0.6, 0);
         glScalef(pathWidth, 0.4, pathWidth);
-        glTranslatef(-obstacleNumberInRow/2, 0, spinningPath - floor(spinningPath));
+        glTranslatef(-obstacleNumberInRow/2, 0, z - floor(z));
 
-        int m =  abs(4 > (int) spinningPath ? (int) spinningPath : -4);
+        int m =  abs(4 > (int) z ? (int) z : -4);
         glTranslatef(0, 0, m);
 
-        int sight = nearbyint(spinningPath) + maxRows;
+        int sight = nearbyint(z) + maxRows;
         int n = rowNumber < sight ? rowNumber : sight;
-        for (int i = (int) spinningPath - m; i < n; i++) {
+        for (int i = (int) z - m; i < n; i++) {
             int j;
             for (j = 0; j < obstacleNumberInRow; j++) {
                 drawObstacle(levelMatrix[i][j]);
@@ -354,6 +350,7 @@ void drawHearts(){
 
     glDisable(GL_LIGHTING);
 
+    // boja srca
     elementsLight(4);
 
     int health = lives;
@@ -413,9 +410,7 @@ void drawSword(){
             glScalef(0.1, 0.2, 0.2);
             glRotatef(-90, 1, 0, 0);
             glutSolidCone(0.19, 0.3, 30, 30);
-        glPopMatrix();
-
-        
+        glPopMatrix();        
 
     glPopMatrix();
 }
