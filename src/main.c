@@ -192,6 +192,8 @@ static void on_display(void){
     /* Iscrtavanje staze */
     drawFloor(2);
 
+    printf("%.1f\n", z);
+
     /* Postavljanje prepreka na stazu */
     drawObstacles(z, lvl.levelMatrix, lvl.rowNumber, lvl.obstacleNumberInRow, lvl.viewDistance, 3.0);
 

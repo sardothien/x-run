@@ -178,7 +178,7 @@ static void drawEnemy(){
 
     // Gornji deo glave
     glPushMatrix();
-        if(notKilled)
+        if(!killed)
             enemyLight(1);
         else
             glColor3f(0.7, 0.7, 0.7);
@@ -191,7 +191,7 @@ static void drawEnemy(){
 
     // Glava
     glPushMatrix();
-        if(notKilled)
+        if(!killed)
             enemyLight(1);
         else
             glColor3f(0.7, 0.7, 0.7);
@@ -202,7 +202,7 @@ static void drawEnemy(){
 
     // Lice
     glPushMatrix();
-        if(notKilled)
+        if(!killed)
             enemyLight(2);
         else 
             glColor3f(0.7, 0.7, 0.7);
@@ -214,7 +214,7 @@ static void drawEnemy(){
 
     // Desno oko
     glPushMatrix();
-        if(notKilled)
+        if(!killed)
             enemyLight(4);
         else
             glColor3f(0.2, 0.2, 0.2);
@@ -225,7 +225,7 @@ static void drawEnemy(){
 
     // Levo oko
     glPushMatrix();
-        if(notKilled)
+        if(!killed)
             enemyLight(4);
         else
             glColor3f(0.2, 0.2, 0.2);
@@ -238,7 +238,7 @@ static void drawEnemy(){
 
     // Desna obrva
     glBegin(GL_LINE_STRIP);
-        if(notKilled)   
+        if(!killed)   
             enemyLight(3);
         else
             glColor3f(0.2, 0.2, 0.2);
@@ -249,7 +249,7 @@ static void drawEnemy(){
 
     // Leva obrva
     glBegin(GL_LINE_STRIP);
-        if(notKilled)   
+        if(!killed)   
             enemyLight(3);
         else
             glColor3f(0.2, 0.2, 0.2);
@@ -260,7 +260,7 @@ static void drawEnemy(){
 
     // Usta    
     glBegin(GL_LINE_STRIP);
-        if(notKilled)   
+        if(!killed)   
             enemyLight(3);
         else
             glColor3f(0.2, 0.2, 0.2);
@@ -446,14 +446,14 @@ void gamePaused(){
 
     glColor3f(0, 1, 0);
 
-    glRasterPos3f(-0.27+x, 1.5, 0);
+    glRasterPos3f(-0.65+x, 1.7, -4.0);
     char word1[MAX_WORD_LENGTH] = "GAME PAUSED\n";
     int wordLen = (int)strlen(word1);
     for(int i = 0; i < wordLen; i++){
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, word1[i]);
     }
     
-    glRasterPos3f(-0.37+x, 1.4, 0);
+    glRasterPos3f(-0.85+x, 1.4, -4.0);
     char word2[MAX_WORD_LENGTH] = "- press S to continue -";
     wordLen = (int)strlen(word2);
     for(int i = 0; i < wordLen; i++){

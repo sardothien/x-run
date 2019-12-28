@@ -28,7 +28,7 @@ int lives;
 
 /* Pomocne promenljive za akciju ubijanja neprijatelja */
 int sword;
-int notKilled;
+int killed;
 
 /* Pomocne promenljive koje detektuju pauzu/kraj igre */
 int paused, won;
