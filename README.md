@@ -11,7 +11,7 @@
 
 ### :wrench: Instalacija:
 * Preuzimanje projekta: `git clone https://github.com/MATF-RG19/RG44-x-run` <br>
-* Pozicionirati se u direktorijum `src` <br>
+* Pozicionirati se u odgovarajući direktorijum komandom `cd RG44-x-run/src` <br>
 * Pokrenuti Makefile komandom `make` <br>
 * Pokrenuti program komandom `./x-run`
 <hr>
