@@ -5,7 +5,7 @@
 * Neophodno je izbegavati prepreke i ubijati neprijatelje, inače se gube životi. <br>
 * Ukoliko se samo prođe pored neprijatelja, takođe se gubi život. <br>
 * Neprijatelj se ubija pritiskom na taster <kbd>space</kbd>. <br> 
-* Pazi da ne pokreneš nož prekasno! <br>
+* Pazi da ne pokreneš mač prekasno! <br>
 * Sakupljanjem krstića se mogu nadoknaditi izgubljeni životi. <br>
 <hr>
 
