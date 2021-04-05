@@ -1,5 +1,7 @@
 # x-run
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9d40cbbeee48401aa2612464c84fd573)](https://www.codacy.com/gh/sardothien/RG44-x-run/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sardothien/RG44-x-run&amp;utm_campaign=Badge_Grade)
+
 ### :pencil: Opis igre:
 * Poenta igrice je preći sve prepreke i doći do cilja. <br>
 * Neophodno je izbegavati prepreke i ubijati neprijatelje, inače se gube životi. <br>
