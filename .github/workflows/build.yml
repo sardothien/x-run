@@ -16,7 +16,7 @@ jobs:
     - uses: openrndr/setup-opengl@v1.1
     
     - name: Install dependencies
-      run: apt-get install freeglut3-dev
+      run: sudo apt-get install freeglut3-dev
 
     - name: Compile App
       run: |
